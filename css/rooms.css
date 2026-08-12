@@ -120,3 +120,11 @@
 }
 .living-hint.hide{opacity:0}
 @keyframes recordSpin{to{transform:rotate(360deg)}}
+
+
+/* V1.2: clearer fallback if the living-room image fails to load */
+.room-living{
+  background:
+    radial-gradient(circle at 52% 38%, rgba(195,139,73,.16), transparent 28%),
+    linear-gradient(135deg,#182132,#17120f 58%,#2c2017);
+}
