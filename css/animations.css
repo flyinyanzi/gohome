@@ -7,3 +7,10 @@
 .door.open{animation:doorOpen 1.2s ease forwards}
 @keyframes dodoMove{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .dodo:hover{animation:dodoMove .5s ease}
+
+
+@keyframes sipPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(.92)}
+}
+.hit-water.sip{animation:sipPulse .45s ease}

@@ -42,20 +42,25 @@
     </section>
 
     <section id="living-room" class="scene room room-living">
-      <button class="back-home">← 回到家里</button>
-      <div class="room-card">
-        <h2>客厅</h2>
-        <p>什么都不做也可以。</p>
-      </div>
+      <img class="living-bg" src="assets/images/living-room-v1.png" alt="夜晚温暖的客厅" />
+      <div id="living-dim" class="living-dim"></div>
 
-      <button id="water-cup" class="object cup" aria-label="喝水">☕</button>
-      <button id="record-player" class="object record" aria-label="播放唱片">◉</button>
-      <button id="slow-down" class="object breathe" aria-label="慢一点">◌</button>
-      <div class="dodo room-dodo">●ᴥ●</div>
+      <button class="back-home">← 回到家里</button>
+
+      <button id="water-cup" class="living-hit hit-water" aria-label="喝水"></button>
+      <button id="floor-lamp" class="living-hit hit-lamp" aria-label="调节落地灯亮度"></button>
+      <button id="slow-down" class="living-hit hit-breathe" aria-label="慢一点"></button>
+
+      <div id="record-game" class="record-game" aria-label="唱片小游戏">
+        <div id="record-disc" class="record-disc" draggable="true" title="把唱片放到转盘中央"></div>
+        <div id="record-target" class="record-target" title="唱片机转盘中央"></div>
+      </div>
 
       <div id="breathing-orb" class="breathing-orb hidden">
-        <span>跟着它待一会儿。</span>
+        <span>跟着它，慢一点。</span>
       </div>
+
+      <div id="living-hint" class="living-hint">点一点房间里的东西看看。</div>
       <div id="toast" class="toast" aria-live="polite"></div>
     </section>
 
