@@ -1,0 +1,9 @@
+
+@keyframes breathe{0%,100%{transform:scale(.78);opacity:.65}50%{transform:scale(1.08);opacity:1}}
+.breathing-orb:not(.hidden){animation:breathe 7s ease-in-out infinite}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(-560px,320px)}}
+.shooting-star.fly{animation:drift 2.4s ease-in forwards}
+@keyframes doorOpen{to{transform:perspective(1000px) rotateY(-72deg);transform-origin:left}}
+.door.open{animation:doorOpen 1.2s ease forwards}
+@keyframes dodoMove{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.dodo:hover{animation:dodoMove .5s ease}

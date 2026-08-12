@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>回来啦</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/rooms.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+  <main id="app">
+    <section id="entrance" class="scene entrance is-active" aria-label="玄关">
+      <div class="night"></div>
+      <button id="door" class="door" aria-label="打开门">
+        <span class="door-knob"></span>
+      </button>
+      <div class="entrance-copy">
+        <p class="eyebrow">外面的事，先放在门外。</p>
+        <h1>回家吧。</h1>
+        <p class="hint">点一下门</p>
+      </div>
+    </section>
+
+    <section id="home" class="scene home" aria-label="家的总览">
+      <div class="home-art" role="img" aria-label="温暖的夜晚小家">
+        <img src="assets/images/home-concept.png" alt="" />
+      </div>
+      <div class="home-copy">
+        <h1>回来啦。</h1>
+        <p>今晚想在哪里待一会儿？</p>
+      </div>
+
+      <button class="room-hotspot living" data-room="living-room">客厅</button>
+      <button class="room-hotspot bedroom" data-room="bedroom">卧室</button>
+      <button class="room-hotspot window" data-room="window-room">窗边</button>
+      <button class="room-hotspot cat" data-room="cat-room">猫猫房</button>
+      <button class="room-hotspot balcony" data-room="balcony">阳台</button>
+      <button class="room-hotspot study" data-room="study">书房</button>
+
+      <div id="dodo-home" class="dodo" title="多多">●ᴥ●</div>
+    </section>
+
+    <section id="living-room" class="scene room room-living">
+      <button class="back-home">← 回到家里</button>
+      <div class="room-card">
+        <h2>客厅</h2>
+        <p>什么都不做也可以。</p>
+      </div>
+
+      <button id="water-cup" class="object cup" aria-label="喝水">☕</button>
+      <button id="record-player" class="object record" aria-label="播放唱片">◉</button>
+      <button id="slow-down" class="object breathe" aria-label="慢一点">◌</button>
+      <div class="dodo room-dodo">●ᴥ●</div>
+
+      <div id="breathing-orb" class="breathing-orb hidden">
+        <span>跟着它待一会儿。</span>
+      </div>
+      <div id="toast" class="toast" aria-live="polite"></div>
+    </section>
+
+    <section id="bedroom" class="scene room room-bedroom">
+      <button class="back-home">← 回到家里</button>
+      <div class="room-card"><h2>卧室</h2><p>还没睡着也没关系。</p></div>
+      <button id="lamp" class="object lamp">💡</button>
+      <button class="object drawer" data-panel="dream-panel">梦境抽屉</button>
+      <div class="dodo room-dodo">●ᴥ●</div>
+    </section>
+
+    <section id="window-room" class="scene room room-window">
+      <button class="back-home">← 回到家里</button>
+      <div class="room-card"><h2>窗边</h2><p>想说的话，可以先留在这里。</p></div>
+      <button class="object note" data-panel="note-panel">写小纸条</button>
+      <div class="rain"></div>
+    </section>
+
+    <section id="cat-room" class="scene room room-cat">
+      <button class="back-home">← 回到家里</button>
+      <div class="room-card"><h2>猫猫房</h2><p>这里没有任务，只有猫。</p></div>
+      <div class="cat-grid">
+        <button>纸箱里：多多</button>
+        <button>窗台上：多多</button>
+        <button>重要文件：还是多多</button>
+      </div>
+      <div class="dodo room-dodo">●ᴥ●</div>
+    </section>
+
+    <section id="balcony" class="scene room room-balcony">
+      <button class="back-home">← 回到家里</button>
+      <div class="room-card"><h2>阳台</h2><p>看看星星，许个愿吧。</p></div>
+      <button id="shooting-star" class="shooting-star" aria-label="抓住流星">✦</button>
+      <button class="object wish" data-panel="wish-panel">许愿</button>
+    </section>
+
+    <section id="study" class="scene room room-study">
+      <button class="back-home">← 回到家里</button>
+      <div class="room-card"><h2>书房</h2><p>以前做过的一些奇怪东西。</p></div>
+      <div class="computer">
+        <a href="games/gomoku/index.html">♟ 技能五子棋</a>
+        <a href="games/mind-reader/index.html">🔮 读心术</a>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="note-panel" class="panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>小纸条</h3>
+      <textarea id="note-input" placeholder="今天想留下一句什么？"></textarea>
+      <div class="actions">
+        <button type="button" id="save-note">留在这里</button>
+        <button type="button" id="release-note">让它随风走掉</button>
+      </div>
+      <div id="note-list" class="archive"></div>
+    </form>
+  </dialog>
+
+  <dialog id="wish-panel" class="panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>抓住了一颗流星</h3>
+      <textarea id="wish-input" placeholder="要不要偷偷许一个愿？"></textarea>
+      <div class="actions">
+        <button type="button" id="save-wish">留下来</button>
+        <button type="button" id="release-wish">送给星星</button>
+      </div>
+      <div id="wish-list" class="archive"></div>
+    </form>
+  </dialog>
+
+  <dialog id="dream-panel" class="panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>梦境抽屉</h3>
+      <label>昨晚梦见什么了？</label>
+      <textarea id="dream-original"></textarea>
+      <label>如果可以重写一次，你想让它怎么结束？</label>
+      <textarea id="dream-rewrite"></textarea>
+      <div class="actions">
+        <button type="button" id="save-dream">把它放进抽屉</button>
+      </div>
+      <div id="dream-list" class="archive"></div>
+    </form>
+  </dialog>
+
+  <script src="js/storage.js"></script>
+  <script src="js/rooms.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
