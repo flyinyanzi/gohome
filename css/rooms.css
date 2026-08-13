@@ -357,3 +357,107 @@
   transition:opacity .25s ease;
 }
 .bedroom-toast.show{opacity:1}
+
+
+/* ===== V1.9 首页：点击区彻底透明 =====
+   背景图自身已有可见房间按钮，所以 HTML hotspot 只负责点击。
+*/
+.home-stage .room-hotspot,
+.home-stage .room-hotspot:hover,
+.home-stage .room-hotspot:focus,
+.home-stage .room-hotspot:focus-visible,
+.home-stage .room-hotspot:active{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  opacity:1 !important;
+  color:transparent !important;
+  text-shadow:none !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+/* ===== V1.9 卧室：按新 1536×1024 正式图重新对齐 =====
+   热点直接覆盖图片里已经画出的功能牌/实体。
+*/
+
+/* 床头灯：左侧“床头灯 / 调节亮度”牌 + 实体灯 */
+.lamp-hit{
+  left:65px !important;
+  top:265px !important;
+  width:230px !important;
+  height:315px !important;
+}
+
+/* “睡不着？点我放松一下” */
+.sleep-hit{
+  left:62px !important;
+  top:588px !important;
+  width:220px !important;
+  height:92px !important;
+}
+
+/* “梦境抽屉 / 记录和改写梦境” */
+.dream-hit{
+  left:1165px !important;
+  top:620px !important;
+  width:300px !important;
+  height:105px !important;
+  border-radius:24px !important;
+}
+
+/* “小纸条 / 写下想说的话” */
+.note-hit{
+  left:575px !important;
+  top:126px !important;
+  width:210px !important;
+  height:95px !important;
+  border-radius:24px !important;
+}
+
+/* “窗外 / 看看外面的世界” */
+.bed-window-hit{
+  left:970px !important;
+  top:184px !important;
+  width:225px !important;
+  height:100px !important;
+  border-radius:24px !important;
+}
+
+/* 新图里的功能牌本身已经足够明确，不再显示额外发光圆点。 */
+.lamp-hit .hot-dot,
+.sleep-hit .hot-dot{
+  display:none !important;
+}
+
+/* 卧室热点同样保持透明，避免覆盖原画里的 UI。 */
+.bed-hit,
+.bed-hit:hover,
+.bed-hit:focus,
+.bed-hit:focus-visible,
+.bed-hit:active{
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+/* “摸摸多多 / 它好像在睡觉” */
+.dodo-hit{
+  left:590px !important;
+  top:474px !important;
+  width:205px !important;
+  height:105px !important;
+  border-radius:24px !important;
+}
