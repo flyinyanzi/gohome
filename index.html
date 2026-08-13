@@ -32,12 +32,12 @@
             <p>今晚想在哪里待一会儿？</p>
           </div>
 
-          <button class="room-hotspot living" data-room="living-room"><span class="room-icon">🛋</span><span><b>客厅</b><small>什么都不做也可以</small></span></button>
-          <button class="room-hotspot bedroom" data-room="bedroom"><span class="room-icon">☾</span><span><b>卧室</b><small>好好休息，也没关系</small></span></button>
-          <button class="room-hotspot window" data-room="window-room"><span class="room-icon">☂</span><span><b>窗边</b><small>把心情放在这里就好</small></span></button>
-          <button class="room-hotspot cat" data-room="cat-room"><span class="room-icon">🐾</span><span><b>猫猫房</b><small>和多多玩一会儿</small></span></button>
-          <button class="room-hotspot balcony" data-room="balcony"><span class="room-icon">✦</span><span><b>阳台</b><small>看看星星，许个愿吧</small></span></button>
-          <button class="room-hotspot study" data-room="study"><span class="room-icon">▤</span><span><b>书房</b><small>玩会儿小游戏</small></span></button>
+          <button class="room-hotspot living" data-room="living-room" aria-label="进入客厅"><span class="sr-only">客厅</span></button>
+          <button class="room-hotspot bedroom" data-room="bedroom" aria-label="进入卧室"><span class="sr-only">卧室</span></button>
+          <button class="room-hotspot window" data-room="window-room" aria-label="进入窗边"><span class="sr-only">窗边</span></button>
+          <button class="room-hotspot cat" data-room="cat-room" aria-label="进入猫猫房"><span class="sr-only">猫猫房</span></button>
+          <button class="room-hotspot balcony" data-room="balcony" aria-label="进入阳台"><span class="sr-only">阳台</span></button>
+          <button class="room-hotspot study" data-room="study" aria-label="进入书房"><span class="sr-only">书房</span></button>
 
           <div id="dodo-home" class="dodo" title="多多">●ᴥ●</div>
         </div>
@@ -94,33 +94,43 @@
           <img class="stage-bg" src="assets/images/bedroom-v1.png" alt="温暖安静的卧室" />
           <div id="bedroom-dim" class="bedroom-dim"></div>
 
-          <button class="back-home">← 回到家里</button>
+          <button class="back-home bedroom-back">← 回到家里</button>
 
-          <div class="bedroom-title">
-            <h2>卧室</h2>
-            <p>还没睡着也没关系。</p>
-          </div>
-
-          <button id="bedside-lamp" class="bedroom-hotspot bed-lamp" aria-label="调节床头灯">
-            <span>灯</span>
+          <!-- physical-object hotspots -->
+          <button id="bedside-lamp" class="bed-hit lamp-hit" aria-label="调节床头灯">
+            <span class="hot-dot"></span>
           </button>
 
-          <button id="sleep-note" class="bedroom-hotspot sleep-note" aria-label="睡不着的时候">
-            <span>睡不着的时候</span>
+          <button id="sleep-help" class="bed-hit sleep-hit" aria-label="睡不着的时候">
+            <span class="hot-dot moon-dot">☾</span>
           </button>
 
-          <button class="bedroom-hotspot dream-drawer" data-panel="dream-panel" aria-label="打开梦境抽屉">
-            <span>梦境抽屉</span>
-          </button>
+          <!-- aligned exactly over the two painted UI buttons in bedroom-v1.png -->
+          <button class="bed-hit dream-hit" data-panel="dream-panel" aria-label="打开梦境抽屉"></button>
+          <button id="bed-note" class="bed-hit note-hit" aria-label="打开小纸条"></button>
 
-          <button id="night-mode" class="bedroom-hotspot night-mode" aria-label="进入夜间模式">
-            <span>夜间模式</span>
-          </button>
+          <!-- the painted window button becomes functional too -->
+          <button id="bed-window" class="bed-hit bed-window-hit" aria-label="看看窗外"></button>
 
-          <div id="bedroom-message" class="bedroom-message hidden">
+          <div id="sleep-card" class="sleep-card hidden">
+            <button id="close-sleep-card" aria-label="关闭">×</button>
+            <div class="sleep-moon">☾</div>
             <p>今晚不用急着睡着。</p>
-            <small>躺着休息，也是在休息。</small>
+            <small>先闭一会儿眼睛，躺着休息也算休息。</small>
+            <button id="start-bed-breathe" class="soft-action">跟着光慢一点</button>
           </div>
+
+          <div id="bed-breathe-orb" class="bed-breathe-orb hidden">
+            <span>慢一点</span>
+          </div>
+
+          <div id="window-card" class="window-card hidden">
+            <button id="close-window-card" aria-label="关闭">×</button>
+            <p>外面还亮着一些灯。</p>
+            <small>今晚先不用把所有事情想明白。</small>
+          </div>
+
+          <div id="bedroom-toast" class="bedroom-toast" aria-live="polite"></div>
         </div>
       </div>
 
@@ -176,6 +186,20 @@
         <button type="button" id="release-note">让它随风走掉</button>
       </div>
       <div id="note-list" class="archive"></div>
+    </form>
+  </dialog>
+
+  <dialog id="bed-note-panel" class="panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>床边小纸条</h3>
+      <p class="panel-lead">想留下的话，就放在这里。</p>
+      <textarea id="bed-note-input" placeholder="今天想记住什么？"></textarea>
+      <div class="actions">
+        <button type="button" id="save-bed-note">留在这里</button>
+        <button type="button" id="release-bed-note">今晚先不留</button>
+      </div>
+      <div id="bed-note-list" class="archive"></div>
     </form>
   </dialog>
 

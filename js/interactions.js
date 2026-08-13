@@ -152,31 +152,77 @@ document.querySelector('[data-panel="wish-panel"]').addEventListener("click",()=
 document.querySelector('[data-panel="dream-panel"]').addEventListener("click",()=>renderArchive("dream",document.getElementById("dream-list"),x=>`<article><small>${when(x.createdAt)}</small><div><b>梦：</b>${escapeHtml(x.data.original||"……")}</div><div><b>新的结局：</b>${escapeHtml(x.data.rewrite||"……")}</div></article>`));
 
 
-// ===== V1.7 卧室框架 =====
-const bedsideLamp = document.getElementById("bedside-lamp");
-const bedroomDim = document.getElementById("bedroom-dim");
-let bedroomLampLevel = 0;
+// ===== V1.8 卧室交互 =====
+function bedSay(text){
+  const t = document.getElementById("bedroom-toast");
+  if(!t) return;
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(window.__bedToastTimer);
+  window.__bedToastTimer = setTimeout(()=>t.classList.remove("show"), 1800);
+}
 
-bedsideLamp?.addEventListener("click", ()=>{
-  bedroomLampLevel = (bedroomLampLevel + 1) % 4;
+let bedLampLevel = 0;
+document.getElementById("bedside-lamp")?.addEventListener("click", ()=>{
+  bedLampLevel = (bedLampLevel + 1) % 4;
+  const dim = document.getElementById("bedroom-dim");
   const levels = [
-    ["rgba(5,7,12,.08)", "灯亮着。"],
-    ["rgba(5,7,12,.22)", "暗一点。"],
-    ["rgba(5,7,12,.38)", "再柔和一点。"],
-    ["rgba(5,7,12,.58)", "只留一点光。"]
+    ["rgba(4,6,10,0)", "灯亮着。"],
+    ["rgba(4,6,10,.18)", "暗一点。"],
+    ["rgba(4,6,10,.34)", "再柔和一点。"],
+    ["rgba(4,6,10,.52)", "只留一点光。"]
   ];
-  bedroomDim.style.background = levels[bedroomLampLevel][0];
-  say(levels[bedroomLampLevel][1]);
+  dim.style.background = levels[bedLampLevel][0];
+  bedSay(levels[bedLampLevel][1]);
 });
 
-document.getElementById("sleep-note")?.addEventListener("click", ()=>{
-  const box = document.getElementById("bedroom-message");
-  box.classList.toggle("hidden");
+document.getElementById("sleep-help")?.addEventListener("click", ()=>{
+  document.getElementById("sleep-card")?.classList.remove("hidden");
 });
 
-document.getElementById("night-mode")?.addEventListener("click", ()=>{
-  bedroomDim.style.background = "rgba(3,5,12,.62)";
-  const box = document.getElementById("bedroom-message");
-  box.classList.remove("hidden");
-  say("把光调低一点。");
+document.getElementById("close-sleep-card")?.addEventListener("click", ()=>{
+  document.getElementById("sleep-card")?.classList.add("hidden");
+  document.getElementById("bed-breathe-orb")?.classList.add("hidden");
+});
+
+document.getElementById("start-bed-breathe")?.addEventListener("click", ()=>{
+  const orb = document.getElementById("bed-breathe-orb");
+  orb?.classList.toggle("hidden");
+  bedSay(orb?.classList.contains("hidden") ? "好啦。" : "不用数拍子，跟着光就好。");
+});
+
+document.getElementById("bed-window")?.addEventListener("click", ()=>{
+  document.getElementById("window-card")?.classList.remove("hidden");
+});
+
+document.getElementById("close-window-card")?.addEventListener("click", ()=>{
+  document.getElementById("window-card")?.classList.add("hidden");
+});
+
+document.getElementById("bed-note")?.addEventListener("click", async ()=>{
+  document.getElementById("bed-note-panel")?.showModal();
+  await renderArchive(
+    "bed-note",
+    document.getElementById("bed-note-list"),
+    x=>`<article><small>${when(x.createdAt)}</small><div>${escapeHtml(x.data.text)}</div></article>`
+  );
+});
+
+document.getElementById("save-bed-note")?.addEventListener("click", async ()=>{
+  const input = document.getElementById("bed-note-input");
+  if(!input?.value.trim()) return;
+  await addMemory("bed-note",{text:input.value.trim()});
+  input.value = "";
+  await renderArchive(
+    "bed-note",
+    document.getElementById("bed-note-list"),
+    x=>`<article><small>${when(x.createdAt)}</small><div>${escapeHtml(x.data.text)}</div></article>`
+  );
+  bedSay("留在这里了。");
+});
+
+document.getElementById("release-bed-note")?.addEventListener("click", ()=>{
+  const input = document.getElementById("bed-note-input");
+  if(input) input.value = "";
+  document.getElementById("bed-note-panel")?.close();
 });
