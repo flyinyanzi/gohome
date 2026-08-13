@@ -1,10 +1,11 @@
+
 (() => {
   const ART_W = 1536;
   const ART_H = 1024;
 
-  document.querySelectorAll('.zoomable-scene').forEach(scene => {
-    const viewport = scene.querySelector('.zoom-viewport');
-    const stage = scene.querySelector('[data-zoom-stage]');
+  document.querySelectorAll(".zoomable-scene").forEach(scene => {
+    const viewport = scene.querySelector(".zoom-viewport");
+    const stage = scene.querySelector("[data-zoom-stage]");
     if (!viewport || !stage) return;
 
     let fitScale = 1;
@@ -19,21 +20,41 @@
     let pinchStartDistance = 0;
     let pinchStartScale = 1;
 
-    function viewportSize(){
+    // Mobile Safari can report a layout viewport larger than what is actually visible.
+    // visualViewport is the real visible area; fall back to the element rect elsewhere.
+    function visibleSize(){
+      const vv = window.visualViewport;
+      if (vv && vv.width > 0 && vv.height > 0){
+        return {
+          width: vv.width,
+          height: vv.height,
+          offsetLeft: vv.offsetLeft || 0,
+          offsetTop: vv.offsetTop || 0
+        };
+      }
+
       const r = viewport.getBoundingClientRect();
-      return { width: r.width, height: r.height };
+      return {
+        width: r.width,
+        height: r.height,
+        offsetLeft: 0,
+        offsetTop: 0
+      };
     }
 
+    // Important: allow the user to zoom OUT below the automatic fit.
+    // This gives a safety margin on phones with browser chrome / unusual aspect ratios.
     function clampUserScale(v){
-      return Math.min(4, Math.max(1, v));
+      return Math.min(4, Math.max(0.62, v));
     }
 
     function clampPan(){
-      const {width, height} = viewportSize();
+      const {width, height} = visibleSize();
       const scale = fitScale * userScale;
       const scaledW = ART_W * scale;
       const scaledH = ART_H * scale;
 
+      // When artwork is smaller than the viewport, keep it centered.
       const maxX = Math.max(0, (scaledW - width) / 2);
       const maxY = Math.max(0, (scaledH - height) / 2);
 
@@ -43,22 +64,27 @@
 
     function render(){
       clampPan();
-      const {width, height} = viewportSize();
+
+      const {width, height, offsetLeft, offsetTop} = visibleSize();
       const scale = fitScale * userScale;
       const scaledW = ART_W * scale;
       const scaledH = ART_H * scale;
 
-      // Center the full artwork first, then apply user pan.
-      // Using top-left transform origin avoids the old translate(-50%) + scale cropping bug.
-      const x = (width - scaledW) / 2 + panX;
-      const y = (height - scaledH) / 2 + panY;
+      // True "contain": center the complete artwork inside the visible browser area.
+      // Any spare width/height becomes intentional dark letterboxing.
+      const x = offsetLeft + (width - scaledW) / 2 + panX;
+      const y = offsetTop + (height - scaledH) / 2 + panY;
+
       stage.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
     }
 
     function fitToScreen(){
-      const {width, height} = viewportSize();
+      const {width, height} = visibleSize();
       if (!width || !height) return;
-      fitScale = Math.min(width / ART_W, height / ART_H);
+
+      // 0.94 leaves a small safety frame around all four edges.
+      // This is deliberate: never crop the room just to fill the screen.
+      fitScale = Math.min(width / ART_W, height / ART_H) * 0.94;
       userScale = 1;
       panX = 0;
       panY = 0;
@@ -67,32 +93,37 @@
 
     function zoomBy(factor){
       userScale = clampUserScale(userScale * factor);
-      if (userScale === 1){ panX = 0; panY = 0; }
+
+      // Center again whenever the artwork becomes smaller than its original fit.
+      if (userScale <= 1){
+        panX = 0;
+        panY = 0;
+      }
       render();
     }
 
-    scene.querySelector('[data-zoom-in]')?.addEventListener('click', e => {
+    scene.querySelector("[data-zoom-in]")?.addEventListener("click", e => {
       e.stopPropagation();
-      zoomBy(1.22);
+      zoomBy(1.18);
     });
-    scene.querySelector('[data-zoom-out]')?.addEventListener('click', e => {
+
+    scene.querySelector("[data-zoom-out]")?.addEventListener("click", e => {
       e.stopPropagation();
-      zoomBy(1 / 1.22);
+      zoomBy(1 / 1.18);
     });
-    scene.querySelector('[data-zoom-reset]')?.addEventListener('click', e => {
+
+    scene.querySelector("[data-zoom-reset]")?.addEventListener("click", e => {
       e.stopPropagation();
       fitToScreen();
     });
 
-    // Desktop: wheel zoom works directly inside the scene.
-    viewport.addEventListener('wheel', e => {
+    viewport.addEventListener("wheel", e => {
       e.preventDefault();
-      zoomBy(e.deltaY < 0 ? 1.10 : 1 / 1.10);
+      zoomBy(e.deltaY < 0 ? 1.08 : 1 / 1.08);
     }, {passive:false});
 
-    viewport.addEventListener('pointerdown', e => {
-      // Let buttons and record interactions receive their own gestures.
-      if (e.target.closest('button,a,textarea,input,.record-disc')) return;
+    viewport.addEventListener("pointerdown", e => {
+      if (e.target.closest("button,a,textarea,input,.record-disc")) return;
 
       pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
       viewport.setPointerCapture?.(e.pointerId);
@@ -104,20 +135,35 @@
       } else if (pointers.size === 2){
         dragging = false;
         const pts = [...pointers.values()];
-        pinchStartDistance = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
+        pinchStartDistance = Math.hypot(
+          pts[1].x - pts[0].x,
+          pts[1].y - pts[0].y
+        );
         pinchStartScale = userScale;
       }
     });
 
-    viewport.addEventListener('pointermove', e => {
+    viewport.addEventListener("pointermove", e => {
       if (!pointers.has(e.pointerId)) return;
       pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
 
       if (pointers.size === 2){
         const pts = [...pointers.values()];
-        const d = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
+        const distance = Math.hypot(
+          pts[1].x - pts[0].x,
+          pts[1].y - pts[0].y
+        );
+
         if (pinchStartDistance > 0){
-          userScale = clampUserScale(pinchStartScale * (d / pinchStartDistance));
+          userScale = clampUserScale(
+            pinchStartScale * (distance / pinchStartDistance)
+          );
+
+          if (userScale <= 1){
+            panX = 0;
+            panY = 0;
+          }
+
           render();
         }
         return;
@@ -137,19 +183,42 @@
       if (pointers.size < 2) pinchStartDistance = 0;
       if (pointers.size === 0) dragging = false;
     }
-    viewport.addEventListener('pointerup', endPointer);
-    viewport.addEventListener('pointercancel', endPointer);
 
-    const refit = () => requestAnimationFrame(fitToScreen);
-    window.addEventListener('resize', refit);
-    window.addEventListener('orientationchange', () => setTimeout(fitToScreen, 180));
-    window.visualViewport?.addEventListener('resize', refit);
+    viewport.addEventListener("pointerup", endPointer);
+    viewport.addEventListener("pointercancel", endPointer);
 
-    // Scene may be hidden when the script first runs. Re-fit whenever it becomes active.
-    const observer = new MutationObserver(() => {
-      if (scene.classList.contains('is-active')) requestAnimationFrame(fitToScreen);
+    // Safari changes the visible area while its top/bottom bars appear or disappear.
+    // Re-fit after those changes, not just after orientation changes.
+    let resizeTimer;
+    function scheduleRefit(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fitToScreen, 80);
+    }
+
+    window.addEventListener("resize", scheduleRefit);
+    window.addEventListener("orientationchange", () => {
+      setTimeout(fitToScreen, 100);
+      setTimeout(fitToScreen, 350);
     });
-    observer.observe(scene, {attributes:true, attributeFilter:['class']});
+
+    if (window.visualViewport){
+      window.visualViewport.addEventListener("resize", scheduleRefit);
+      window.visualViewport.addEventListener("scroll", render);
+    }
+
+    const observer = new MutationObserver(() => {
+      if (scene.classList.contains("is-active")){
+        requestAnimationFrame(() => {
+          fitToScreen();
+          setTimeout(fitToScreen, 120);
+        });
+      }
+    });
+
+    observer.observe(scene, {
+      attributes:true,
+      attributeFilter:["class"]
+    });
 
     fitToScreen();
   });
