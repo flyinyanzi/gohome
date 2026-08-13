@@ -32,12 +32,12 @@
             <p>今晚想在哪里待一会儿？</p>
           </div>
 
-          <button class="room-hotspot living" data-room="living-room">客厅</button>
-          <button class="room-hotspot bedroom" data-room="bedroom">卧室</button>
-          <button class="room-hotspot window" data-room="window-room">窗边</button>
-          <button class="room-hotspot cat" data-room="cat-room">猫猫房</button>
-          <button class="room-hotspot balcony" data-room="balcony">阳台</button>
-          <button class="room-hotspot study" data-room="study">书房</button>
+          <button class="room-hotspot living" data-room="living-room"><span class="room-icon">🛋</span><span><b>客厅</b><small>什么都不做也可以</small></span></button>
+          <button class="room-hotspot bedroom" data-room="bedroom"><span class="room-icon">☾</span><span><b>卧室</b><small>好好休息，也没关系</small></span></button>
+          <button class="room-hotspot window" data-room="window-room"><span class="room-icon">☂</span><span><b>窗边</b><small>把心情放在这里就好</small></span></button>
+          <button class="room-hotspot cat" data-room="cat-room"><span class="room-icon">🐾</span><span><b>猫猫房</b><small>和多多玩一会儿</small></span></button>
+          <button class="room-hotspot balcony" data-room="balcony"><span class="room-icon">✦</span><span><b>阳台</b><small>看看星星，许个愿吧</small></span></button>
+          <button class="room-hotspot study" data-room="study"><span class="room-icon">▤</span><span><b>书房</b><small>玩会儿小游戏</small></span></button>
 
           <div id="dodo-home" class="dodo" title="多多">●ᴥ●</div>
         </div>
@@ -88,12 +88,47 @@
       </div>
     </section>
 
-    <section id="bedroom" class="scene room room-bedroom">
-      <button class="back-home">← 回到家里</button>
-      <div class="room-card"><h2>卧室</h2><p>还没睡着也没关系。</p></div>
-      <button id="lamp" class="object lamp">💡</button>
-      <button class="object drawer" data-panel="dream-panel">梦境抽屉</button>
-      <div class="dodo room-dodo">●ᴥ●</div>
+    <section id="bedroom" class="scene room room-bedroom zoomable-scene">
+      <div class="zoom-viewport">
+        <div class="art-stage bedroom-stage" data-zoom-stage>
+          <img class="stage-bg" src="assets/images/bedroom-v1.png" alt="温暖安静的卧室" />
+          <div id="bedroom-dim" class="bedroom-dim"></div>
+
+          <button class="back-home">← 回到家里</button>
+
+          <div class="bedroom-title">
+            <h2>卧室</h2>
+            <p>还没睡着也没关系。</p>
+          </div>
+
+          <button id="bedside-lamp" class="bedroom-hotspot bed-lamp" aria-label="调节床头灯">
+            <span>灯</span>
+          </button>
+
+          <button id="sleep-note" class="bedroom-hotspot sleep-note" aria-label="睡不着的时候">
+            <span>睡不着的时候</span>
+          </button>
+
+          <button class="bedroom-hotspot dream-drawer" data-panel="dream-panel" aria-label="打开梦境抽屉">
+            <span>梦境抽屉</span>
+          </button>
+
+          <button id="night-mode" class="bedroom-hotspot night-mode" aria-label="进入夜间模式">
+            <span>夜间模式</span>
+          </button>
+
+          <div id="bedroom-message" class="bedroom-message hidden">
+            <p>今晚不用急着睡着。</p>
+            <small>躺着休息，也是在休息。</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="zoom-controls" aria-label="画面缩放">
+        <button type="button" data-zoom-out aria-label="缩小">−</button>
+        <button type="button" data-zoom-reset aria-label="恢复">⌂</button>
+        <button type="button" data-zoom-in aria-label="放大">＋</button>
+      </div>
     </section>
 
     <section id="window-room" class="scene room room-window">
