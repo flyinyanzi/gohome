@@ -226,3 +226,8 @@ document.getElementById("release-bed-note")?.addEventListener("click", ()=>{
   if(input) input.value = "";
   document.getElementById("bed-note-panel")?.close();
 });
+
+
+document.getElementById("pet-dodo")?.addEventListener("click", ()=>{
+  bedSay("多多没有醒，只是轻轻动了一下耳朵。");
+});
