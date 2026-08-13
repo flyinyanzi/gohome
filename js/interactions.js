@@ -61,6 +61,8 @@ const target = document.getElementById("record-target");
 function finishRecordGame(){
   target.classList.remove("record-ready");
   target.classList.add("record-success");
+  const sleeve=document.querySelector(".record-sleeve");
+  if(sleeve) sleeve.style.opacity="0";
   disc.style.opacity="0";
   disc.style.pointerEvents="none";
   say("放好了。给自己听一首歌吧。");

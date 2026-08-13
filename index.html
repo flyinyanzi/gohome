@@ -22,46 +22,70 @@
       </div>
     </section>
 
-    <section id="home" class="scene home" aria-label="家的总览">
-      <div class="home-art" role="img" aria-label="温暖的夜晚小家">
-        <img src="assets/images/home-concept.png" alt="" />
-      </div>
-      <div class="home-copy">
-        <h1>回来啦。</h1>
-        <p>今晚想在哪里待一会儿？</p>
+    <section id="home" class="scene home zoomable-scene" aria-label="家的总览">
+      <div class="zoom-viewport">
+        <div class="art-stage home-stage" data-zoom-stage>
+          <img class="stage-bg" src="assets/images/home-concept.png" alt="" />
+
+          <div class="home-copy">
+            <h1>回来啦。</h1>
+            <p>今晚想在哪里待一会儿？</p>
+          </div>
+
+          <button class="room-hotspot living" data-room="living-room">客厅</button>
+          <button class="room-hotspot bedroom" data-room="bedroom">卧室</button>
+          <button class="room-hotspot window" data-room="window-room">窗边</button>
+          <button class="room-hotspot cat" data-room="cat-room">猫猫房</button>
+          <button class="room-hotspot balcony" data-room="balcony">阳台</button>
+          <button class="room-hotspot study" data-room="study">书房</button>
+
+          <div id="dodo-home" class="dodo" title="多多">●ᴥ●</div>
+        </div>
       </div>
 
-      <button class="room-hotspot living" data-room="living-room">客厅</button>
-      <button class="room-hotspot bedroom" data-room="bedroom">卧室</button>
-      <button class="room-hotspot window" data-room="window-room">窗边</button>
-      <button class="room-hotspot cat" data-room="cat-room">猫猫房</button>
-      <button class="room-hotspot balcony" data-room="balcony">阳台</button>
-      <button class="room-hotspot study" data-room="study">书房</button>
-
-      <div id="dodo-home" class="dodo" title="多多">●ᴥ●</div>
+      <div class="zoom-controls" aria-label="画面缩放">
+        <button type="button" data-zoom-out aria-label="缩小">−</button>
+        <button type="button" data-zoom-reset aria-label="恢复">⌂</button>
+        <button type="button" data-zoom-in aria-label="放大">＋</button>
+      </div>
     </section>
 
-    <section id="living-room" class="scene room room-living">
-      <img class="living-bg" src="assets/images/living-room-v1.png" alt="夜晚温暖的客厅" onerror="this.style.display='none'; document.getElementById('living-hint').textContent='客厅背景图没有加载，请检查 assets/images/living-room-v1.png'; document.getElementById('living-hint').style.opacity='1';" />
-      <div id="living-dim" class="living-dim"></div>
+    <section id="living-room" class="scene room room-living zoomable-scene">
+      <div class="zoom-viewport">
+        <div class="art-stage living-stage" data-zoom-stage>
+          <img class="stage-bg" src="assets/images/living-room-v1.png" alt="夜晚温暖的客厅"
+               onerror="this.style.display='none'; document.getElementById('living-hint').textContent='客厅背景图没有加载，请检查 assets/images/living-room-v1.png'; document.getElementById('living-hint').style.opacity='1';" />
+          <div id="living-dim" class="living-dim"></div>
 
-      <button class="back-home">← 回到家里</button>
+          <button class="back-home">← 回到家里</button>
 
-      <button id="water-cup" class="living-hit hit-water" aria-label="喝水"></button>
-      <button id="floor-lamp" class="living-hit hit-lamp" aria-label="调节落地灯亮度"></button>
-      <button id="slow-down" class="living-hit hit-breathe" aria-label="慢一点"></button>
+          <button id="water-cup" class="living-hit hit-water" aria-label="喝水"></button>
+          <button id="floor-lamp" class="living-hit hit-lamp" aria-label="调节落地灯亮度"></button>
+          <button id="slow-down" class="living-hit hit-breathe" aria-label="慢一点"></button>
 
-      <div id="record-game" class="record-game" aria-label="唱片小游戏">
-        <div id="record-disc" class="record-disc" draggable="true" title="把唱片放到转盘中央"></div>
-        <div id="record-target" class="record-target" title="唱片机转盘中央"></div>
+          <div id="record-game" class="record-game" aria-label="唱片小游戏">
+            <div class="record-sleeve" aria-hidden="true">
+              <div id="record-disc" class="record-disc" draggable="true" title="把唱片放到转盘中央"></div>
+            </div>
+            <div id="record-target" class="record-target" title="唱片机转盘中央">
+              <span class="spindle"></span>
+            </div>
+          </div>
+
+          <div id="breathing-orb" class="breathing-orb hidden">
+            <span>跟着它，慢一点。</span>
+          </div>
+
+          <div id="living-hint" class="living-hint">点一点房间里的东西看看。</div>
+          <div id="toast" class="toast" aria-live="polite"></div>
+        </div>
       </div>
 
-      <div id="breathing-orb" class="breathing-orb hidden">
-        <span>跟着它，慢一点。</span>
+      <div class="zoom-controls" aria-label="画面缩放">
+        <button type="button" data-zoom-out aria-label="缩小">−</button>
+        <button type="button" data-zoom-reset aria-label="恢复">⌂</button>
+        <button type="button" data-zoom-in aria-label="放大">＋</button>
       </div>
-
-      <div id="living-hint" class="living-hint">点一点房间里的东西看看。</div>
-      <div id="toast" class="toast" aria-live="polite"></div>
     </section>
 
     <section id="bedroom" class="scene room room-bedroom">
@@ -151,6 +175,7 @@
   <script src="js/storage.js"></script>
   <script src="js/rooms.js"></script>
   <script src="js/interactions.js"></script>
+  <script src="js/zoom.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
