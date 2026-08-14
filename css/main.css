@@ -150,3 +150,29 @@ html, body{
   margin:-6px 0 14px;
   opacity:.72;
 }
+
+
+/* ===== V1.11 unified room back button ===== */
+.room-back-button{
+  top:24px !important;
+  left:24px !important;
+  z-index:60 !important;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:10px 16px !important;
+  border:1px solid rgba(241,223,186,.45) !important;
+  border-radius:999px !important;
+  background:rgba(18,16,18,.72) !important;
+  color:#f3dfbd !important;
+  box-shadow:0 7px 24px rgba(0,0,0,.28) !important;
+  backdrop-filter:blur(9px) !important;
+  -webkit-backdrop-filter:blur(9px) !important;
+  text-shadow:none !important;
+}
+.room-back-button:hover,
+.room-back-button:focus-visible{
+  border-color:rgba(246,222,176,.8) !important;
+  background:rgba(35,28,24,.8) !important;
+  box-shadow:0 8px 28px rgba(0,0,0,.38), 0 0 18px rgba(222,174,99,.16) !important;
+}
