@@ -51,7 +51,7 @@
                onerror="this.style.display='none'; document.getElementById('living-hint').textContent='客厅背景图没有加载，请检查 assets/images/living-room-v1.png'; document.getElementById('living-hint').style.opacity='1';" />
           <div id="living-dim" class="living-dim"></div>
 
-          <button class="back-home room-back-button">⌂ 回到小家</button>
+          <button class="back-home room-back-hotspot living-back-hotspot" aria-label="回到小家"><span class="sr-only">回到小家</span></button>
 
           <button id="water-cup" class="living-hit hit-water" aria-label="喝水"></button>
           <button id="floor-lamp" class="living-hit hit-lamp" aria-label="调节落地灯亮度"></button>
@@ -88,7 +88,7 @@
           <img class="stage-bg" src="assets/images/bedroom-v1.png" alt="温暖安静的卧室" />
           <div id="bedroom-dim" class="bedroom-dim"></div>
 
-          <button class="back-home bedroom-back room-back-button">⌂ 回到小家</button>
+          <button class="back-home room-back-hotspot bedroom-back-hotspot" aria-label="回到小家"><span class="sr-only">回到小家</span></button>
 
           <!-- physical-object hotspots -->
           <button id="bedside-lamp" class="bed-hit lamp-hit" aria-label="调节床头灯">
@@ -127,8 +127,10 @@
             </div>
           </div>
 
-          <div id="bed-breathe-orb" class="bed-breathe-orb hidden">
-            <span>慢一点</span>
+          <div id="bed-breathe-orb" class="bed-breathe-orb hidden" aria-live="polite">
+            <div class="bed-breathe-core"></div>
+            <span class="breath-copy breath-in">慢慢吸气</span>
+            <span class="breath-copy breath-out">慢慢呼气</span>
           </div>
 
           <div id="window-card" class="window-card hidden">
