@@ -183,12 +183,25 @@ document.getElementById("sleep-help")?.addEventListener("click", ()=>{
 document.getElementById("close-sleep-card")?.addEventListener("click", ()=>{
   document.getElementById("sleep-card")?.classList.add("hidden");
   document.getElementById("bed-breathe-orb")?.classList.add("hidden");
+  clearTimeout(__bedBreathingTimer);
 });
 
+let __bedBreathingTimer;
 document.getElementById("start-bed-breathe")?.addEventListener("click", ()=>{
   const orb = document.getElementById("bed-breathe-orb");
-  orb?.classList.toggle("hidden");
-  bedSay(orb?.classList.contains("hidden") ? "好啦。" : "不用数拍子，跟着光就好。");
+  const card = document.getElementById("sleep-card");
+  if(!orb) return;
+
+  clearTimeout(__bedBreathingTimer);
+  card?.classList.add("hidden");
+  orb.classList.remove("hidden");
+  bedSay("不用数拍子，跟着光就好。");
+
+  // Three slow cycles, then quietly finish on its own.
+  __bedBreathingTimer = setTimeout(()=>{
+    orb.classList.add("hidden");
+    bedSay("好啦，慢慢待一会儿。");
+  }, 24000);
 });
 
 document.getElementById("bed-window")?.addEventListener("click", ()=>{
