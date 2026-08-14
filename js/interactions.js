@@ -96,10 +96,10 @@ disc.addEventListener("pointerup",e=>{
 });
 
 // ===== 其他房间原有交互 =====
-document.getElementById("lamp").addEventListener("click",()=>{
-  document.getElementById("bedroom").classList.toggle("lights-out");
+document.getElementById("lamp")?.addEventListener("click",()=>{
+  document.getElementById("bedroom")?.classList.toggle("lights-out");
 });
-document.getElementById("shooting-star").addEventListener("click",e=>{
+document.getElementById("shooting-star")?.addEventListener("click",e=>{
   e.currentTarget.classList.remove("fly");
   void e.currentTarget.offsetWidth;
   e.currentTarget.classList.add("fly");
