@@ -26,13 +26,7 @@
       <div class="zoom-viewport">
         <div class="art-stage home-stage" data-zoom-stage>
           <img class="stage-bg" src="assets/images/home-concept.png" alt="" />
-
-          <div class="home-copy">
-            <h1>回来啦。</h1>
-            <p>今晚想在哪里待一会儿？</p>
-          </div>
-
-          <button class="room-hotspot living" data-room="living-room" aria-label="进入客厅"><span class="sr-only">客厅</span></button>
+<button class="room-hotspot living" data-room="living-room" aria-label="进入客厅"><span class="sr-only">客厅</span></button>
           <button class="room-hotspot bedroom" data-room="bedroom" aria-label="进入卧室"><span class="sr-only">卧室</span></button>
           <button class="room-hotspot window" data-room="window-room" aria-label="进入窗边"><span class="sr-only">窗边</span></button>
           <button class="room-hotspot cat" data-room="cat-room" aria-label="进入猫猫房"><span class="sr-only">猫猫房</span></button>
@@ -57,7 +51,7 @@
                onerror="this.style.display='none'; document.getElementById('living-hint').textContent='客厅背景图没有加载，请检查 assets/images/living-room-v1.png'; document.getElementById('living-hint').style.opacity='1';" />
           <div id="living-dim" class="living-dim"></div>
 
-          <button class="back-home">← 回到家里</button>
+          <button class="back-home room-back-button">⌂ 回到小家</button>
 
           <button id="water-cup" class="living-hit hit-water" aria-label="喝水"></button>
           <button id="floor-lamp" class="living-hit hit-lamp" aria-label="调节落地灯亮度"></button>
@@ -94,7 +88,7 @@
           <img class="stage-bg" src="assets/images/bedroom-v1.png" alt="温暖安静的卧室" />
           <div id="bedroom-dim" class="bedroom-dim"></div>
 
-          <button class="back-home bedroom-back">← 回到家里</button>
+          <button class="back-home bedroom-back room-back-button">⌂ 回到小家</button>
 
           <!-- physical-object hotspots -->
           <button id="bedside-lamp" class="bed-hit lamp-hit" aria-label="调节床头灯">
