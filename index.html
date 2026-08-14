@@ -168,11 +168,34 @@
       <div class="dodo room-dodo">●ᴥ●</div>
     </section>
 
-    <section id="balcony" class="scene room room-balcony">
-      <button class="back-home">← 回到家里</button>
-      <div class="room-card"><h2>阳台</h2><p>看看星星，许个愿吧。</p></div>
-      <button id="shooting-star" class="shooting-star" aria-label="抓住流星">✦</button>
-      <button class="object wish" data-panel="wish-panel">许愿</button>
+    <section id="balcony" class="scene room room-balcony zoomable-scene">
+      <div class="zoom-viewport">
+        <div class="art-stage balcony-stage" data-zoom-stage>
+          <img class="stage-bg" src="assets/images/balcony-v1.png" alt="夜晚的阳台" />
+          <div id="balcony-night-filter" class="balcony-night-filter"></div>
+
+          <button class="back-home balcony-hit balcony-back" aria-label="回到小家"><span class="sr-only">回到小家</span></button>
+          <button id="balcony-shooting-star" class="balcony-hit balcony-star" aria-label="抓流星"></button>
+          <button id="balcony-write-wish" class="balcony-hit balcony-write" aria-label="写下愿望"></button>
+          <button id="balcony-wish-box" class="balcony-hit balcony-box" aria-label="愿望盒子"></button>
+          <button id="balcony-breeze" class="balcony-hit balcony-breeze" aria-label="吹吹风"></button>
+          <button id="balcony-dodo" class="balcony-hit balcony-dodo" aria-label="摸摸多多"></button>
+          <button id="balcony-night-mode" class="balcony-hit balcony-night" aria-label="夜间模式"></button>
+
+          <div id="balcony-wind" class="balcony-wind hidden" aria-hidden="true">
+            <i></i><i></i><i></i>
+          </div>
+          <div id="balcony-star-fly" class="balcony-star-fly hidden">✦</div>
+          <div id="balcony-dodo-hearts" class="balcony-dodo-hearts hidden"><span>♡</span><span>♡</span></div>
+          <div id="balcony-toast" class="bedroom-toast balcony-toast" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="zoom-controls" aria-label="画面缩放">
+        <button type="button" data-zoom-out aria-label="缩小">−</button>
+        <button type="button" data-zoom-reset aria-label="恢复">⌂</button>
+        <button type="button" data-zoom-in aria-label="放大">＋</button>
+      </div>
     </section>
 
     <section id="study" class="scene room room-study">
@@ -209,6 +232,20 @@
         <button type="button" id="release-bed-note">今晚先不留</button>
       </div>
       <div id="bed-note-list" class="archive"></div>
+    </form>
+  </dialog>
+
+  <dialog id="balcony-wish-panel" class="panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>写下一个愿望</h3>
+      <p class="panel-lead">不用很伟大。今天希望发生的小事，也算愿望。</p>
+      <textarea id="balcony-wish-input" placeholder="比如：今晚睡个好觉。"></textarea>
+      <div class="actions">
+        <button type="button" id="save-balcony-wish">留在愿望盒子里</button>
+        <button type="button" id="send-balcony-wish">送给星星</button>
+      </div>
+      <div id="balcony-wish-list" class="archive"></div>
     </form>
   </dialog>
 
