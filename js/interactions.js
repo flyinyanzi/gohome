@@ -283,3 +283,83 @@ document.getElementById("bed-window")?.addEventListener("click", ()=>{
     setTimeout(()=>stars.classList.add("hidden"), 7000);
   }
 });
+
+
+// ===== V1.13 阳台 =====
+function balconySay(text){
+  const t = document.getElementById("balcony-toast");
+  if(!t) return;
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(window.__balconyToastTimer);
+  window.__balconyToastTimer = setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+document.getElementById("balcony-breeze")?.addEventListener("click",()=>{
+  const wind = document.getElementById("balcony-wind");
+  wind?.classList.toggle("hidden");
+  balconySay(wind?.classList.contains("hidden") ? "风停了一点。" : "什么也不用想，吹一会儿风。");
+});
+
+document.getElementById("balcony-shooting-star")?.addEventListener("click",()=>{
+  const star = document.getElementById("balcony-star-fly");
+  if(star){
+    star.classList.remove("hidden");
+    star.style.animation="none"; void star.offsetWidth; star.style.animation="";
+    setTimeout(()=>star.classList.add("hidden"),1600);
+  }
+  balconySay("抓到了。要不要替它留一个愿望？");
+  setTimeout(()=>document.getElementById("balcony-wish-panel")?.showModal(),700);
+});
+
+document.getElementById("balcony-write-wish")?.addEventListener("click",()=>{
+  document.getElementById("balcony-wish-panel")?.showModal();
+});
+
+async function renderBalconyWishes(){
+  await renderArchive(
+    "balcony-wish",
+    document.getElementById("balcony-wish-list"),
+    x=>`<article><small>${when(x.createdAt)}</small><div>${escapeHtml(x.data.text)}</div></article>`
+  );
+}
+
+document.getElementById("balcony-wish-box")?.addEventListener("click",async()=>{
+  document.getElementById("balcony-wish-panel")?.showModal();
+  await renderBalconyWishes();
+});
+
+document.getElementById("save-balcony-wish")?.addEventListener("click",async()=>{
+  const input=document.getElementById("balcony-wish-input");
+  if(!input?.value.trim()) return;
+  await addMemory("balcony-wish",{text:input.value.trim()});
+  input.value="";
+  await renderBalconyWishes();
+  balconySay("愿望留在这里了。");
+});
+
+document.getElementById("send-balcony-wish")?.addEventListener("click",()=>{
+  const input=document.getElementById("balcony-wish-input");
+  if(!input?.value.trim()) return;
+  input.value="";
+  document.getElementById("balcony-wish-panel")?.close();
+  balconySay("送给星星了。今晚不用负责实现它。");
+});
+
+document.getElementById("balcony-dodo")?.addEventListener("click",()=>{
+  const hearts=document.getElementById("balcony-dodo-hearts");
+  if(hearts){
+    hearts.classList.remove("hidden");
+    hearts.querySelectorAll("span").forEach(el=>{
+      el.style.animation="none";void el.offsetWidth;el.style.animation="";
+    });
+    setTimeout(()=>hearts.classList.add("hidden"),1800);
+  }
+  balconySay("多多好像也很喜欢这里的风。");
+});
+
+document.getElementById("balcony-night-mode")?.addEventListener("click",()=>{
+  const stage=document.querySelector(".balcony-stage");
+  const on=stage?.classList.toggle("night-deeper");
+  balconySay(on ? "灯光暗一点，星星就更亮一点。" : "把灯光调回来啦。");
+});
