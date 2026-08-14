@@ -544,3 +544,74 @@
   25%{opacity:1}
   100%{transform:translateY(-80px) scale(1.15);opacity:0}
 }
+
+
+/* ===== V1.12 breathing guide visibility fix =====
+   Previously the breathing orb sat behind the sleep card, so the text response appeared
+   but the visual change was effectively hidden.
+*/
+.bed-breathe-orb{
+  z-index:80 !important;
+  width:300px !important;
+  height:300px !important;
+  margin:-150px 0 0 -150px !important;
+  background:transparent !important;
+  overflow:visible;
+}
+.bed-breathe-core{
+  position:absolute;
+  inset:32px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,
+      rgba(255,232,183,.72) 0%,
+      rgba(236,202,142,.34) 32%,
+      rgba(134,161,203,.20) 60%,
+      rgba(91,119,170,.06) 75%,
+      transparent 78%);
+  box-shadow:
+    0 0 45px rgba(249,215,153,.30),
+    0 0 95px rgba(122,151,205,.16);
+  animation:bedBreatheCore 8s ease-in-out infinite;
+}
+@keyframes bedBreatheCore{
+  0%,100%{
+    transform:scale(.62);
+    opacity:.42;
+    filter:blur(.4px);
+  }
+  50%{
+    transform:scale(1.12);
+    opacity:1;
+    filter:blur(0);
+  }
+}
+.breath-copy{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:100%;
+  text-align:center;
+  color:#fff0d1;
+  font-size:21px;
+  letter-spacing:.08em;
+  text-shadow:0 2px 14px #000;
+  opacity:0;
+}
+.breath-in{
+  animation:breathInCopy 8s ease-in-out infinite;
+}
+.breath-out{
+  animation:breathOutCopy 8s ease-in-out infinite;
+}
+@keyframes breathInCopy{
+  0%,8%{opacity:0}
+  18%,38%{opacity:1}
+  48%,100%{opacity:0}
+}
+@keyframes breathOutCopy{
+  0%,48%{opacity:0}
+  58%,86%{opacity:1}
+  96%,100%{opacity:0}
+}

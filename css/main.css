@@ -176,3 +176,48 @@ html, body{
   background:rgba(35,28,24,.8) !important;
   box-shadow:0 8px 28px rgba(0,0,0,.38), 0 0 18px rgba(222,174,99,.16) !important;
 }
+
+
+/* ===== V1.12 return buttons: transparent hotspots over painted UI ===== */
+.room-back-hotspot,
+.room-back-hotspot:hover,
+.room-back-hotspot:focus,
+.room-back-hotspot:focus-visible,
+.room-back-hotspot:active{
+  position:absolute !important;
+  z-index:70 !important;
+  padding:0 !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  color:transparent !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+/* living-room-v1.png: painted "回到小家" at top-left */
+.living-back-hotspot{
+  left:18px !important;
+  top:18px !important;
+  width:145px !important;
+  height:63px !important;
+  border-radius:24px !important;
+}
+
+/* bedroom-v1.png: painted "回到小家" at bottom-left */
+.bedroom-back-hotspot{
+  left:20px !important;
+  top:auto !important;
+  bottom:22px !important;
+  width:160px !important;
+  height:58px !important;
+  border-radius:24px !important;
+}
