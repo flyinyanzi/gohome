@@ -615,3 +615,68 @@
   58%,86%{opacity:1}
   96%,100%{opacity:0}
 }
+
+
+/* ===== V1.13 阳台 ===== */
+.room-balcony{background:#07101b}
+.room-balcony:before,.room-balcony:after{display:none!important}
+.balcony-stage{background:#07101b}
+.balcony-night-filter{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:rgba(1,5,13,0);transition:background .55s ease;
+}
+.balcony-stage.night-deeper .balcony-night-filter{
+  background:rgba(1,5,13,.30);
+}
+.balcony-hit,
+.balcony-hit:hover,.balcony-hit:focus,.balcony-hit:focus-visible,.balcony-hit:active{
+  position:absolute;z-index:22;padding:0;border:0;outline:0;
+  background:transparent!important;box-shadow:none!important;
+  -webkit-tap-highlight-color:transparent;
+}
+/* Coordinates measured against the generated 1536×1024 artwork. */
+.balcony-back{left:20px;top:18px;width:190px;height:65px;border-radius:26px}
+.balcony-star{left:1130px;top:60px;width:235px;height:95px;border-radius:28px}
+.balcony-write{left:585px;top:188px;width:205px;height:95px;border-radius:28px}
+.balcony-box{left:1240px;top:468px;width:245px;height:95px;border-radius:28px}
+.balcony-breeze{left:570px;top:575px;width:220px;height:90px;border-radius:28px}
+.balcony-dodo{left:76px;top:865px;width:210px;height:90px;border-radius:28px}
+.balcony-night{left:1310px;top:930px;width:205px;height:65px;border-radius:28px}
+
+.balcony-wind{
+  position:absolute;z-index:18;left:410px;top:450px;width:560px;height:270px;
+  pointer-events:none;overflow:hidden;
+}
+.balcony-wind i{
+  position:absolute;left:-120px;width:220px;height:2px;border-radius:50%;
+  background:linear-gradient(90deg,transparent,rgba(177,220,255,.75),transparent);
+  filter:blur(.2px);animation:balconyWind 3.8s ease-in-out infinite;
+}
+.balcony-wind i:nth-child(1){top:60px}
+.balcony-wind i:nth-child(2){top:130px;animation-delay:.8s}
+.balcony-wind i:nth-child(3){top:200px;animation-delay:1.5s}
+@keyframes balconyWind{
+  0%{transform:translateX(0) scaleX(.7);opacity:0}
+  20%{opacity:.7}
+  75%{opacity:.45}
+  100%{transform:translateX(720px) scaleX(1.3);opacity:0}
+}
+.balcony-star-fly{
+  position:absolute;z-index:30;left:910px;top:110px;
+  color:#fff1ba;font-size:34px;text-shadow:0 0 20px #c9b8ff;
+  pointer-events:none;animation:catchStar 1.5s ease-out forwards;
+}
+@keyframes catchStar{
+  0%{transform:translate(0,0) scale(.7);opacity:0}
+  25%{opacity:1}
+  100%{transform:translate(-280px,160px) scale(1.25);opacity:0}
+}
+.balcony-dodo-hearts{
+  position:absolute;z-index:31;left:175px;top:735px;width:100px;height:100px;pointer-events:none
+}
+.balcony-dodo-hearts span{
+  position:absolute;bottom:0;color:#f6d7aa;font-size:28px;
+  animation:dodoHeart 1.6s ease-out forwards;
+}
+.balcony-dodo-hearts span:nth-child(2){left:42px;animation-delay:.2s}
+.balcony-toast{z-index:50}
