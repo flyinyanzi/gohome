@@ -112,13 +112,25 @@
           <!-- the painted window button becomes functional too -->
           <button id="bed-window" class="bed-hit bed-window-hit" aria-label="看看窗外"></button>
           <button id="pet-dodo" class="bed-hit dodo-hit" aria-label="摸摸多多"></button>
+          <button id="bed-night-mode" class="bed-hit bed-night-hit" aria-label="夜间模式"></button>
+          <div id="bed-window-stars" class="bed-window-stars hidden" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div id="dodo-reaction" class="dodo-reaction hidden" aria-hidden="true">
+            <span>♡</span><span>♡</span><span>♡</span>
+          </div>
+
 
           <div id="sleep-card" class="sleep-card hidden">
             <button id="close-sleep-card" aria-label="关闭">×</button>
             <div class="sleep-moon">☾</div>
             <p>今晚不用急着睡着。</p>
             <small>先闭一会儿眼睛，躺着休息也算休息。</small>
-            <button id="start-bed-breathe" class="soft-action">跟着光慢一点</button>
+            <div class="sleep-actions">
+              <button id="start-bed-breathe" class="soft-action">跟着光慢一点</button>
+              <button id="dim-bed-light" class="soft-action">把灯调暗</button>
+              <button id="just-rest" class="soft-action">就这样躺一会儿</button>
+            </div>
           </div>
 
           <div id="bed-breathe-orb" class="bed-breathe-orb hidden">
