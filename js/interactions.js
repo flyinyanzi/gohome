@@ -230,4 +230,43 @@ document.getElementById("release-bed-note")?.addEventListener("click", ()=>{
 
 document.getElementById("pet-dodo")?.addEventListener("click", ()=>{
   bedSay("多多没有醒，只是轻轻动了一下耳朵。");
+  const reaction = document.getElementById("dodo-reaction");
+  if(reaction){
+    reaction.classList.remove("hidden");
+    reaction.querySelectorAll("span").forEach(el=>{
+      el.style.animation = "none";
+      void el.offsetWidth;
+      el.style.animation = "";
+    });
+    setTimeout(()=>reaction.classList.add("hidden"), 1800);
+  }
+});
+
+
+document.getElementById("dim-bed-light")?.addEventListener("click", ()=>{
+  const dim = document.getElementById("bedroom-dim");
+  bedLampLevel = 2;
+  if(dim) dim.style.background = "rgba(4,6,10,.34)";
+  bedSay("好，灯暗一点。");
+});
+
+document.getElementById("just-rest")?.addEventListener("click", ()=>{
+  document.getElementById("sleep-card")?.classList.add("hidden");
+  document.getElementById("bed-breathe-orb")?.classList.add("hidden");
+  bedSay("什么也不用做，就躺一会儿。");
+});
+
+document.getElementById("bed-night-mode")?.addEventListener("click", ()=>{
+  const stage = document.querySelector(".bedroom-stage");
+  if(!stage) return;
+  const on = stage.classList.toggle("night-on");
+  bedSay(on ? "夜间模式。把房间再安静一点。" : "夜间模式关掉了。");
+});
+
+document.getElementById("bed-window")?.addEventListener("click", ()=>{
+  const stars = document.getElementById("bed-window-stars");
+  if(stars){
+    stars.classList.remove("hidden");
+    setTimeout(()=>stars.classList.add("hidden"), 7000);
+  }
 });
