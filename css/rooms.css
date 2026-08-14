@@ -461,3 +461,86 @@
   height:105px !important;
   border-radius:24px !important;
 }
+
+
+/* ===== V1.10 卧室功能补全 ===== */
+.bed-night-hit{
+  left:1355px !important;
+  top:925px !important;
+  width:155px !important;
+  height:62px !important;
+  border-radius:26px !important;
+}
+.sleep-actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:16px;
+}
+.sleep-actions .soft-action{margin-top:0}
+
+.bedroom-stage.night-on .bedroom-dim{
+  background:
+    radial-gradient(circle at 13% 49%, rgba(235,176,93,.12) 0 10%, transparent 25%),
+    linear-gradient(rgba(4,7,18,.58), rgba(3,5,14,.68)) !important;
+}
+.bedroom-stage.night-on .stage-bg{
+  filter:saturate(.78) brightness(.78);
+  transition:filter .65s ease;
+}
+
+.bed-window-stars{
+  position:absolute;
+  z-index:17;
+  left:970px;
+  top:50px;
+  width:280px;
+  height:330px;
+  pointer-events:none;
+}
+.bed-window-stars i{
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#fff3bd;
+  box-shadow:0 0 10px #ffe69a;
+  animation:bedStarTwinkle 1.8s ease-in-out infinite alternate;
+}
+.bed-window-stars i:nth-child(1){left:16%;top:18%;animation-delay:.1s}
+.bed-window-stars i:nth-child(2){left:48%;top:10%;animation-delay:.5s}
+.bed-window-stars i:nth-child(3){left:73%;top:25%;animation-delay:.9s}
+.bed-window-stars i:nth-child(4){left:33%;top:44%;animation-delay:.3s}
+.bed-window-stars i:nth-child(5){left:84%;top:53%;animation-delay:1.1s}
+.bed-window-stars i:nth-child(6){left:58%;top:67%;animation-delay:.7s}
+@keyframes bedStarTwinkle{
+  from{transform:scale(.65);opacity:.35}
+  to{transform:scale(1.35);opacity:1}
+}
+
+.dodo-reaction{
+  position:absolute;
+  z-index:35;
+  left:790px;
+  top:510px;
+  width:130px;
+  height:110px;
+  pointer-events:none;
+}
+.dodo-reaction span{
+  position:absolute;
+  bottom:0;
+  color:#f8d9a8;
+  font-size:26px;
+  opacity:0;
+  animation:dodoHeart 1.6s ease-out forwards;
+}
+.dodo-reaction span:nth-child(1){left:15px;animation-delay:0s}
+.dodo-reaction span:nth-child(2){left:55px;animation-delay:.18s}
+.dodo-reaction span:nth-child(3){left:92px;animation-delay:.34s}
+@keyframes dodoHeart{
+  0%{transform:translateY(0) scale(.7);opacity:0}
+  25%{opacity:1}
+  100%{transform:translateY(-80px) scale(1.15);opacity:0}
+}
