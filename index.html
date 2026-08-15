@@ -150,11 +150,36 @@
       </div>
     </section>
 
-    <section id="window-room" class="scene room room-window">
-      <button class="back-home">← 回到家里</button>
-      <div class="room-card"><h2>窗边</h2><p>想说的话，可以先留在这里。</p></div>
-      <button class="object note" data-panel="note-panel">写小纸条</button>
-      <div class="rain"></div>
+    <section id="window-room" class="scene room room-window zoomable-scene">
+      <div class="zoom-viewport">
+        <div class="art-stage window-stage" data-zoom-stage>
+          <img class="stage-bg" src="assets/images/window-room-v1.png" alt="傍晚温暖的窗边" />
+          <div id="window-night-filter" class="window-night-filter"></div>
+
+          <button class="back-home window-hit window-back" aria-label="回到小家"><span class="sr-only">回到小家</span></button>
+          <button id="window-laundry" class="window-hit window-laundry-hit" aria-label="晾衣服"></button>
+          <button id="window-litter" class="window-hit window-litter-hit" aria-label="铲猫砂"></button>
+          <button id="window-breeze" class="window-hit window-breeze-hit" aria-label="吹吹风"></button>
+          <button id="window-dodo" class="window-hit window-dodo-hit" aria-label="摸摸多多"></button>
+          <button id="window-night-mode" class="window-hit window-night-hit" aria-label="夜间模式"></button>
+
+          <div id="window-wind-lines" class="window-wind-lines hidden" aria-hidden="true">
+            <i></i><i></i><i></i>
+          </div>
+
+          <div id="window-dodo-hearts" class="window-dodo-hearts hidden" aria-hidden="true">
+            <span>♡</span><span>♡</span>
+          </div>
+
+          <div id="window-toast" class="bedroom-toast window-toast" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="zoom-controls" aria-label="画面缩放">
+        <button type="button" data-zoom-out aria-label="缩小">−</button>
+        <button type="button" data-zoom-reset aria-label="恢复">⌂</button>
+        <button type="button" data-zoom-in aria-label="放大">＋</button>
+      </div>
     </section>
 
     <section id="cat-room" class="scene room room-cat">
@@ -235,6 +260,59 @@
     </form>
   </dialog>
 
+  <dialog id="laundry-panel" class="panel laundry-panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>晾衣服</h3>
+      <p class="panel-lead">平淡的日常也很惬意。</p>
+
+      <div id="laundry-game" class="laundry-game">
+        <div class="laundry-line">
+          <div class="hanger-slot" data-slot="0"></div>
+          <div class="hanger-slot" data-slot="1"></div>
+          <div class="hanger-slot sheet-slot" data-slot="2"></div>
+          <div class="hanger-slot" data-slot="3"></div>
+        </div>
+
+        <div class="laundry-basket">
+          <button type="button" class="laundry-item shirt-a" data-item="0">衬衫</button>
+          <button type="button" class="laundry-item shirt-b" data-item="1">上衣</button>
+          <button type="button" class="laundry-item sheet" data-item="2">床单</button>
+          <button type="button" class="laundry-item towel" data-item="3">毛巾</button>
+        </div>
+
+        <div id="helper-hand" class="helper-hand hidden" aria-hidden="true">
+          <span class="helper-sleeve"></span>
+          <span class="helper-palm"></span>
+        </div>
+
+        <div id="laundry-caption" class="laundry-caption">点一件衣服，再点晾衣杆上的位置。</div>
+        <div class="laundry-progress" aria-label="晾衣进度">
+          <i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="litter-panel" class="panel litter-panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>铲猫砂</h3>
+      <p class="panel-lead">清理一下，多多会更舒服。</p>
+
+      <div id="litter-game" class="litter-game">
+        <div class="litter-tray">
+          <button type="button" class="litter-clump c1" aria-label="猫砂团"></button>
+          <button type="button" class="litter-clump c2" aria-label="猫砂团"></button>
+          <button type="button" class="litter-clump c3" aria-label="猫砂团"></button>
+          <div class="litter-grains"></div>
+        </div>
+        <div id="litter-scoop" class="litter-scoop">▱</div>
+        <div id="litter-caption" class="laundry-caption">点掉三个小团块就好。</div>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="balcony-wish-panel" class="panel">
     <form method="dialog">
       <button class="close">×</button>
@@ -277,11 +355,11 @@
     </form>
   </dialog>
 
-  <script src="js/storage.js?v=1.15"></script>
-  <script src="js/rooms.js?v=1.15"></script>
-  <script src="js/interactions.js?v=1.15"></script>
-  <script src="js/room-features.js?v=1.15"></script>
-  <script src="js/zoom.js?v=1.15"></script>
-  <script src="js/app.js?v=1.15"></script>
+  <script src="js/storage.js?v=1.16"></script>
+  <script src="js/rooms.js?v=1.16"></script>
+  <script src="js/interactions.js?v=1.16"></script>
+  <script src="js/room-features.js?v=1.16"></script>
+  <script src="js/zoom.js?v=1.16"></script>
+  <script src="js/app.js?v=1.16"></script>
 </body>
 </html>
