@@ -680,3 +680,179 @@
 }
 .balcony-dodo-hearts span:nth-child(2){left:42px;animation-delay:.2s}
 .balcony-toast{z-index:50}
+
+
+/* ===== V1.16 窗边 ===== */
+.room-window{background:#26180f}
+.room-window:before,.room-window:after{display:none!important}
+.window-stage{background:#26180f}
+
+.window-night-filter{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:rgba(15,10,15,0);transition:background .55s ease;
+}
+.window-stage.night-on .window-night-filter{
+  background:linear-gradient(rgba(22,16,35,.28),rgba(8,11,24,.44));
+}
+.window-stage.night-on .stage-bg{
+  filter:saturate(.88) brightness(.78);
+  transition:filter .55s ease;
+}
+
+.window-hit,
+.window-hit:hover,.window-hit:focus,.window-hit:focus-visible,.window-hit:active{
+  position:absolute;z-index:22;padding:0;border:0;outline:0;
+  background:transparent!important;box-shadow:none!important;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Coordinates aligned to the 1536×1024 artwork. */
+.window-back{left:22px;top:28px;width:210px;height:67px;border-radius:28px}
+.window-laundry-hit{left:820px;top:210px;width:290px;height:105px;border-radius:30px}
+.window-breeze-hit{left:1170px;top:352px;width:250px;height:100px;border-radius:30px}
+.window-dodo-hit{left:265px;top:355px;width:245px;height:95px;border-radius:30px}
+.window-litter-hit{left:315px;top:630px;width:255px;height:100px;border-radius:30px}
+.window-night-hit{left:1260px;top:900px;width:245px;height:85px;border-radius:30px}
+
+.window-wind-lines{
+  position:absolute;z-index:18;left:730px;top:355px;width:620px;height:260px;
+  pointer-events:none;overflow:hidden
+}
+.window-wind-lines i{
+  position:absolute;left:-140px;width:250px;height:2px;border-radius:50%;
+  background:linear-gradient(90deg,transparent,rgba(219,238,255,.8),transparent);
+  animation:windowWind 3.5s ease-in-out infinite;
+}
+.window-wind-lines i:nth-child(1){top:35px}
+.window-wind-lines i:nth-child(2){top:120px;animation-delay:.8s}
+.window-wind-lines i:nth-child(3){top:205px;animation-delay:1.45s}
+@keyframes windowWind{
+  0%{transform:translateX(0) scaleX(.65);opacity:0}
+  22%{opacity:.72}
+  80%{opacity:.35}
+  100%{transform:translateX(770px) scaleX(1.15);opacity:0}
+}
+
+.window-dodo-hearts{
+  position:absolute;z-index:33;left:310px;top:470px;width:130px;height:100px;pointer-events:none
+}
+.window-dodo-hearts span{
+  position:absolute;bottom:0;color:#f7cf9e;font-size:27px;
+  animation:dodoHeart 1.55s ease-out forwards
+}
+.window-dodo-hearts span:nth-child(2){left:45px;animation-delay:.18s}
+.window-toast{z-index:52}
+
+/* ===== 晾衣服 mini game ===== */
+.laundry-panel{width:min(760px,94vw)}
+.laundry-game{
+  position:relative;
+  min-height:430px;
+  padding:24px 10px 12px;
+  overflow:hidden;
+  border-radius:18px;
+  background:
+    linear-gradient(rgba(249,235,207,.9),rgba(242,224,190,.94)),
+    radial-gradient(circle at 70% 15%,rgba(255,203,140,.35),transparent 35%);
+}
+.laundry-line{
+  position:relative;
+  height:190px;
+  margin:0 22px 14px;
+  border-top:4px solid #5c4731;
+}
+.hanger-slot{
+  position:absolute;
+  top:16px;
+  width:105px;
+  height:135px;
+  border:2px dashed rgba(91,67,42,.24);
+  border-radius:14px;
+  transition:.25s;
+}
+.hanger-slot:nth-child(1){left:4%}
+.hanger-slot:nth-child(2){left:29%}
+.hanger-slot:nth-child(3){left:54%;width:150px}
+.hanger-slot:nth-child(4){right:2%}
+.hanger-slot.ready{border-color:rgba(135,91,48,.72);background:rgba(255,246,225,.52)}
+.hanger-slot.done{
+  border-style:solid;
+  border-color:rgba(99,75,47,.25);
+  background:rgba(255,246,225,.36);
+}
+.hanger-slot.done::after{
+  content:attr(data-label);
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  color:#725134;font-size:18px
+}
+.laundry-basket{
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+  padding:12px 8px 4px
+}
+.laundry-item{
+  border:1px solid #bea47c;background:#f8ecd4;color:#4a3524;
+  border-radius:14px;padding:11px 18px;box-shadow:0 4px 10px rgba(84,57,29,.1)
+}
+.laundry-item.selected{outline:3px solid rgba(215,155,81,.38);transform:translateY(-2px)}
+.laundry-item.used{opacity:.28;pointer-events:none}
+
+.helper-hand{
+  position:absolute;
+  right:30px;
+  top:105px;
+  width:170px;height:95px;
+  transform:rotate(-11deg);
+  animation:helperArrive .75s ease-out both;
+  pointer-events:none
+}
+.helper-sleeve{
+  position:absolute;right:0;top:26px;width:104px;height:48px;
+  border-radius:25px 9px 9px 25px;
+  background:linear-gradient(90deg,#c8b18f,#9b8269);
+  box-shadow:0 5px 15px rgba(80,53,30,.2)
+}
+.helper-palm{
+  position:absolute;left:12px;top:28px;width:66px;height:40px;
+  border-radius:45% 45% 42% 42%;
+  background:linear-gradient(#e7c3a5,#d9ad8c);
+}
+@keyframes helperArrive{
+  from{transform:translateX(90px) rotate(-11deg);opacity:0}
+  to{transform:translateX(0) rotate(-11deg);opacity:1}
+}
+.laundry-caption{text-align:center;color:#5c432e;margin-top:14px;min-height:24px}
+.laundry-progress{
+  display:flex;justify-content:center;gap:8px;margin-top:12px
+}
+.laundry-progress i{
+  width:11px;height:11px;border-radius:50%;background:#d9c6a4
+}
+.laundry-progress i.done{background:#8f6d45;box-shadow:0 0 8px rgba(143,109,69,.3)}
+
+/* ===== 铲猫砂 mini game ===== */
+.litter-panel{width:min(650px,92vw)}
+.litter-game{
+  position:relative;min-height:360px;padding:24px;
+  border-radius:18px;background:linear-gradient(#f1e1c2,#e8d3ae)
+}
+.litter-tray{
+  position:relative;width:min(480px,90%);height:245px;margin:12px auto;
+  border:12px solid #9c8067;border-radius:42px 42px 54px 54px;
+  background:radial-gradient(circle,#c8ad7d 1px,transparent 2px);
+  background-size:11px 11px;
+  box-shadow:inset 0 -18px 24px rgba(83,59,36,.12)
+}
+.litter-clump{
+  position:absolute;width:48px;height:38px;border:0;border-radius:48% 52% 45% 55%;
+  background:#8d7153;box-shadow:0 4px 8px rgba(62,43,28,.22)
+}
+.litter-clump.c1{left:25%;top:32%}
+.litter-clump.c2{left:57%;top:51%}
+.litter-clump.c3{left:70%;top:20%}
+.litter-clump.removed{animation:clumpGone .45s ease forwards;pointer-events:none}
+@keyframes clumpGone{to{transform:translate(75px,-75px) rotate(28deg) scale(.4);opacity:0}}
+.litter-scoop{
+  position:absolute;right:54px;bottom:50px;font-size:58px;color:#6d5948;
+  transform:rotate(-18deg);transition:.25s
+}
+.litter-scoop.scoop{transform:translate(-80px,-50px) rotate(-8deg)}
