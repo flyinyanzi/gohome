@@ -130,3 +130,23 @@ games/mind-reader/
 - 新功能脚本全部使用防御式节点绑定，即使某个可选元素不存在，也不会影响其他按钮。
 - `index.html` 对脚本加入 `?v=1.14`，用于绕过 GitHub Pages / 手机浏览器对旧 JS 的缓存。
 - 浏览器控制台会出现 `[gohome] room-features v1.14 loaded`，可用于确认新版脚本确实已经部署。
+
+
+## V1.15 精确根因修复 + 结构加固
+
+### 查明的根因
+V1.13 之后已经没有 `[data-panel="wish-panel"]` 这个入口，但 `interactions.js` 仍然直接执行：
+
+```js
+document.querySelector('[data-panel="wish-panel"]').addEventListener(...)
+```
+
+`querySelector()` 返回 `null`，于是浏览器抛出 `TypeError`，`interactions.js` 从这一行起停止执行。
+这正好解释了当时的现象：前面已经注册好的通用梦境抽屉还能打开，而后面才注册的卧室/阳台自定义功能全部失效。
+
+### 本版修复
+- 把 note / wish / dream 的旧入口监听统一改为 `bindArchiveTrigger()` 防御式绑定；元素不存在时直接跳过，不再抛错。
+- `rooms.js` 也加入目标场景、目标 dialog 的存在检查。
+- 保留 V1.14 的结构性改进：卧室和阳台继续放在独立 `room-features.js`，不再和客厅旧逻辑挤在同一条执行链上。
+- 所有本地 JS 都增加 `?v=1.15`，降低 GitHub Pages / 手机浏览器使用旧缓存的概率。
+- 控制台若看到 `[gohome] room-features v1.15 loaded`，说明新版房间功能脚本已成功加载。
