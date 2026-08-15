@@ -394,5 +394,75 @@ document.querySelectorAll(".litter-clump").forEach(clump=>{
 });
 
 
-  console.info("[gohome] room-features v1.16 loaded");
+
+// =========================
+// Cat room
+// =========================
+function catSay(text){ flash("cat-toast", text, 2100); }
+
+const catPhotos = [
+  ["photo-01-first-meet.jpeg","first","第一次见面"],["photo-02-pickup.jpeg","pickup","去接多多"],
+  ["photo-03-hotel.jpeg","hotel","刚回来的两天"],["photo-04-hotel.jpeg","hotel","刚回来的两天"],
+  ["photo-05-hotel.jpeg","hotel","刚回来的两天"],["photo-06-hotel.jpeg","hotel","刚回来的两天"],
+  ["photo-07-later.jpeg","later","后来又见面啦"],["photo-08-later.jpeg","later","后来又见面啦"],
+  ["photo-09-later.jpeg","later","后来又见面啦"],["photo-10-daily-food.jpeg","daily","北京的日常"],
+  ["photo-11-daily-lap.jpeg","daily","北京的日常"],["photo-12-daily-chair.jpeg","daily","北京的日常"],
+  ["photo-13-tongue.jpeg","daily","隐藏彩蛋"],["photo-14-daily-water.jpeg","daily","北京的日常"],
+  ["photo-15-daily-play.jpeg","daily","北京的日常"]
+].map(([file,cat,label])=>({src:`assets/images/cat-room/photos/${file}`,cat,label}));
+
+function renderCatAlbum(filter="all"){
+  const grid=$("cat-album-grid"); if(!grid) return;
+  const rows=filter==="all"?catPhotos:catPhotos.filter(p=>p.cat===filter);
+  grid.innerHTML=rows.map(p=>`<button type="button"><img src="${p.src}" alt="${safe(p.label)}"><small>${safe(p.label)}</small></button>`).join("");
+}
+
+$("cat-photo-wall")?.addEventListener("click",()=>{renderCatAlbum("all");$("cat-album-panel")?.showModal();});
+document.querySelectorAll("[data-album-filter]").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll("[data-album-filter]").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderCatAlbum(btn.dataset.albumFilter);
+}));
+
+function showCatPhoto(src,left,top){
+  const pop=$("cat-photo-pop"); if(!pop) return;
+  pop.style.left=left+"px";pop.style.top=top+"px";pop.style.backgroundImage=`url("${src}")`;
+  pop.classList.remove("hidden");clearTimeout(pop.__timer);pop.__timer=setTimeout(()=>pop.classList.add("hidden"),2600);
+}
+
+$("cat-main-dodo")?.addEventListener("click",()=>{
+  const hearts=$("cat-reaction");
+  if(hearts){hearts.classList.remove("hidden");restartChildrenAnimation(hearts);clearTimeout(hearts.__timer);hearts.__timer=setTimeout(()=>hearts.classList.add("hidden"),1700);}
+  const p=["多多眨了一下眼睛。","呼噜……","尾巴轻轻动了一下。","多多看了你一眼。"];catSay(p[Math.floor(Math.random()*p.length)]);
+});
+
+$("cat-food")?.addEventListener("click",()=>{catSay("饭饭时间。");showCatPhoto("assets/images/cat-room/photos/photo-10-daily-food.jpeg",185,570);});
+$("cat-bed")?.addEventListener("click",()=>{catSay("这个窝看起来很舒服。");showCatPhoto("assets/images/cat-room/photos/photo-14-daily-water.jpeg",280,450);});
+$("cat-chair")?.addEventListener("click",()=>{catSay("这里以前也被多多占领过。");showCatPhoto("assets/images/cat-room/photos/photo-11-daily-lap.jpeg",520,255);});
+
+$("cat-toy")?.addEventListener("click",()=>{
+  const ball=$("cat-toy-ball");if(ball){ball.classList.remove("hidden");ball.style.animation="none";void ball.offsetWidth;ball.style.animation="";clearTimeout(ball.__timer);ball.__timer=setTimeout(()=>ball.classList.add("hidden"),1450);}catSay("咻——");
+});
+
+$("cat-tree")?.addEventListener("click",()=>catSay(Math.random()<.5?"多多今天没在最高层。":"好像有一条尾巴刚刚闪过去。"));
+
+$("cat-box")?.addEventListener("click",()=>{
+  const roll=Math.random();
+  if(roll<.25){catSay("……？");showCatPhoto("assets/images/cat-room/photos/photo-13-tongue.jpeg",1110,420);return;}
+  const ears=$("cat-box-ears");if(ears){ears.classList.remove("hidden");clearTimeout(ears.__timer);ears.__timer=setTimeout(()=>ears.classList.add("hidden"),1500);}
+  catSay(roll<.62?"纸箱里好像有东西。":"今天只是一个普通纸箱。");
+});
+
+const dailyLines=["今天适合晒太阳。\\n其他事情明天再说。","饭很好吃。\\n别的以后再说。","今日重要工作：\\n盯着一个东西看。","心情：不知道。\\n尾巴：知道。","今天适合找一个舒服的地方趴着。","今日安排：吃饭、发呆、再吃饭。","有些事情不用想明白，\\n先睡一觉。","今天的多多：\\n不接受采访。","适合玩五分钟，\\n然后突然失去兴趣。","今天也可以只是好好待着。"];
+function getDailyDodo(){
+  const now=new Date(),key=`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;let hash=0;
+  for(let i=0;i<key.length;i++) hash=((hash<<5)-hash+key.charCodeAt(i))|0;
+  return {date:key,line:dailyLines[Math.abs(hash)%dailyLines.length]};
+}
+$("cat-calendar")?.addEventListener("click",()=>{
+  const data=getDailyDodo(),card=$("cat-daily-card");
+  if(card) card.innerHTML=`<div><div class="date">${safe(data.date)} · 今日多多</div><div class="paw">🐾</div><div class="line">${safe(data.line).replace(/\\n/g,"<br>")}</div></div>`;
+  $("cat-daily-panel")?.showModal();
+});
+
+
+  console.info("[gohome] room-features v1.17 loaded");
 })();
