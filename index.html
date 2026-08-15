@@ -182,15 +182,34 @@
       </div>
     </section>
 
-    <section id="cat-room" class="scene room room-cat">
-      <button class="back-home">← 回到家里</button>
-      <div class="room-card"><h2>猫猫房</h2><p>这里没有任务，只有猫。</p></div>
-      <div class="cat-grid">
-        <button>纸箱里：多多</button>
-        <button>窗台上：多多</button>
-        <button>重要文件：还是多多</button>
+    <section id="cat-room" class="scene room room-cat zoomable-scene">
+      <div class="zoom-viewport">
+        <div class="art-stage cat-stage" data-zoom-stage>
+          <img class="stage-bg" src="assets/images/cat-room-v1.png" alt="午后阳光里的多多房间" />
+          <div id="cat-sunbeam" class="cat-sunbeam"></div>
+          <div id="cat-dust" class="cat-dust"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+          <button class="back-home cat-hit cat-back" aria-label="回到小家"><span class="sr-only">回到小家</span></button>
+          <button id="cat-main-dodo" class="cat-hit cat-dodo-hit" aria-label="摸摸多多"></button>
+          <button id="cat-photo-wall" class="cat-hit cat-photo-hit" aria-label="照片墙"></button>
+          <button id="cat-calendar" class="cat-hit cat-calendar-hit" aria-label="今日多多"></button>
+          <button id="cat-box" class="cat-hit cat-box-hit" aria-label="纸箱"></button>
+          <button id="cat-food" class="cat-hit cat-food-hit" aria-label="饭饭角"></button>
+          <button id="cat-toy" class="cat-hit cat-toy-hit" aria-label="玩具"></button>
+          <button id="cat-tree" class="cat-hit cat-tree-hit" aria-label="猫爬架"></button>
+          <button id="cat-chair" class="cat-hit cat-chair-hit" aria-label="椅子"></button>
+          <button id="cat-bed" class="cat-hit cat-bed-hit" aria-label="猫窝"></button>
+
+          <div id="cat-reaction" class="cat-reaction hidden"><span>♡</span><span>♡</span><span>♡</span></div>
+          <div id="cat-box-ears" class="cat-box-ears hidden"><span></span><span></span></div>
+          <div id="cat-toy-ball" class="cat-toy-ball hidden"></div>
+          <div id="cat-photo-pop" class="cat-photo-pop hidden"></div>
+          <div id="cat-toast" class="bedroom-toast cat-toast" aria-live="polite"></div>
+        </div>
       </div>
-      <div class="dodo room-dodo">●ᴥ●</div>
+      <div class="zoom-controls">
+        <button type="button" data-zoom-out>−</button><button type="button" data-zoom-reset>⌂</button><button type="button" data-zoom-in>＋</button>
+      </div>
     </section>
 
     <section id="balcony" class="scene room room-balcony zoomable-scene">
@@ -257,6 +276,29 @@
         <button type="button" id="release-bed-note">今晚先不留</button>
       </div>
       <div id="bed-note-list" class="archive"></div>
+    </form>
+  </dialog>
+
+  <dialog id="cat-album-panel" class="panel cat-album-panel">
+    <form method="dialog">
+      <button class="close">×</button><h3>多多相册</h3>
+      <p class="panel-lead">从第一次见面，到后来很多普通又可爱的日子。</p>
+      <div class="album-tabs">
+        <button type="button" data-album-filter="all" class="active">全部</button>
+        <button type="button" data-album-filter="first">第一次见面</button>
+        <button type="button" data-album-filter="pickup">接多多回家</button>
+        <button type="button" data-album-filter="hotel">刚回来的两天</button>
+        <button type="button" data-album-filter="daily">北京的日常</button>
+        <button type="button" data-album-filter="later">后来又见面啦</button>
+      </div>
+      <div id="cat-album-grid" class="cat-album-grid"></div>
+    </form>
+  </dialog>
+
+  <dialog id="cat-daily-panel" class="panel cat-daily-panel">
+    <form method="dialog">
+      <button class="close">×</button><h3>今日多多</h3>
+      <div id="cat-daily-card" class="cat-daily-card"></div>
     </form>
   </dialog>
 
@@ -355,11 +397,11 @@
     </form>
   </dialog>
 
-  <script src="js/storage.js?v=1.16"></script>
-  <script src="js/rooms.js?v=1.16"></script>
-  <script src="js/interactions.js?v=1.16"></script>
-  <script src="js/room-features.js?v=1.16"></script>
-  <script src="js/zoom.js?v=1.16"></script>
-  <script src="js/app.js?v=1.16"></script>
+  <script src="js/storage.js?v=1.17"></script>
+  <script src="js/rooms.js?v=1.17"></script>
+  <script src="js/interactions.js?v=1.17"></script>
+  <script src="js/room-features.js?v=1.17"></script>
+  <script src="js/zoom.js?v=1.17"></script>
+  <script src="js/app.js?v=1.17"></script>
 </body>
 </html>
