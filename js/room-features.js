@@ -249,5 +249,150 @@
   });
 
   // Tiny dev marker in console, useful for GitHub Pages cache/deploy checking.
-  console.info("[gohome] room-features v1.15 loaded");
+
+// =========================
+// Window room
+// =========================
+function windowSay(text){
+  flash("window-toast", text, 2100);
+}
+
+$("window-breeze")?.addEventListener("click", ()=>{
+  const wind = $("window-wind-lines");
+  if(!wind) return;
+  wind.classList.toggle("hidden");
+  windowSay(wind.classList.contains("hidden") ? "风轻了一点。" : "让风把烦闷也带走一点。");
+});
+
+$("window-dodo")?.addEventListener("click", ()=>{
+  const hearts = $("window-dodo-hearts");
+  if(hearts){
+    hearts.classList.remove("hidden");
+    restartChildrenAnimation(hearts);
+    clearTimeout(hearts.__timer);
+    hearts.__timer = setTimeout(()=>hearts.classList.add("hidden"),1700);
+  }
+  windowSay("多多今天也很可爱。");
+});
+
+$("window-night-mode")?.addEventListener("click", ()=>{
+  const stage = document.querySelector(".window-stage");
+  if(!stage) return;
+  const on = stage.classList.toggle("night-on");
+  windowSay(on ? "让这里安静下来。" : "把傍晚的光找回来。");
+});
+
+// Laundry mini-game
+let selectedLaundry = null;
+let laundryDone = new Set();
+const laundryLabels = ["衬衫","上衣","床单","毛巾"];
+
+function resetLaundrySelection(){
+  document.querySelectorAll(".laundry-item").forEach(el=>el.classList.remove("selected"));
+  document.querySelectorAll(".hanger-slot").forEach(el=>el.classList.remove("ready"));
+  selectedLaundry = null;
+}
+
+function setLaundryCaption(text){
+  const el = $("laundry-caption");
+  if(el) el.textContent = text;
+}
+
+function updateLaundryProgress(){
+  document.querySelectorAll(".laundry-progress i").forEach((dot,i)=>{
+    dot.classList.toggle("done", laundryDone.has(i));
+  });
+}
+
+$("window-laundry")?.addEventListener("click", ()=>{
+  $("laundry-panel")?.showModal();
+  setLaundryCaption(laundryDone.size === 4 ? "今天的衣服也晾好了。" : "点一件衣服，再点晾衣杆上的位置。");
+});
+
+document.querySelectorAll(".laundry-item").forEach(item=>{
+  item.addEventListener("click", ()=>{
+    if(item.classList.contains("used")) return;
+    document.querySelectorAll(".laundry-item").forEach(el=>el.classList.remove("selected"));
+    item.classList.add("selected");
+    selectedLaundry = Number(item.dataset.item);
+    document.querySelectorAll(".hanger-slot").forEach(el=>el.classList.add("ready"));
+    setLaundryCaption(selectedLaundry === 2 ? "床单有点大。" : "找个合适的位置挂起来吧。");
+  });
+});
+
+document.querySelectorAll(".hanger-slot").forEach(slot=>{
+  slot.addEventListener("click", ()=>{
+    if(selectedLaundry === null) return;
+    const slotIndex = Number(slot.dataset.slot);
+
+    // Keep one item per slot for a clear little game.
+    if(slot.classList.contains("done")){
+      setLaundryCaption("这里已经挂好啦。");
+      return;
+    }
+
+    const item = document.querySelector(`.laundry-item[data-item="${selectedLaundry}"]`);
+    slot.classList.remove("ready");
+    slot.classList.add("done");
+    slot.dataset.label = laundryLabels[selectedLaundry];
+    item?.classList.add("used");
+    laundryDone.add(selectedLaundry);
+
+    if(selectedLaundry === 2){
+      // Quiet collaboration moment: no explanatory relationship copy.
+      const helper = $("helper-hand");
+      helper?.classList.remove("hidden");
+      setLaundryCaption("另一边刚好被接住了。");
+      setTimeout(()=>{
+        helper?.classList.add("hidden");
+        if(laundryDone.size < 4) setLaundryCaption("继续吧。");
+      },1800);
+    }else{
+      setLaundryCaption("好啦。");
+    }
+
+    updateLaundryProgress();
+    resetLaundrySelection();
+
+    if(laundryDone.size === 4){
+      setTimeout(()=>{
+        setLaundryCaption("今天的衣服也晾好了。");
+        windowSay("今天的衣服也晾好了。");
+      },500);
+    }
+  });
+});
+
+// Litter mini-game
+$("window-litter")?.addEventListener("click", ()=>{
+  $("litter-panel")?.showModal();
+});
+
+document.querySelectorAll(".litter-clump").forEach(clump=>{
+  clump.addEventListener("click", ()=>{
+    if(clump.classList.contains("removed")) return;
+    const scoop = $("litter-scoop");
+    scoop?.classList.add("scoop");
+    clump.classList.add("removed");
+
+    setTimeout(()=>scoop?.classList.remove("scoop"),420);
+
+    const left = document.querySelectorAll(".litter-clump:not(.removed)").length;
+    const cap = $("litter-caption");
+    if(cap){
+      cap.textContent = left > 0 ? `还剩 ${left} 个小团块。` : "干净啦。";
+    }
+
+    if(left === 0){
+      setTimeout(()=>{
+        windowSay("猫砂盆清理好了。");
+        // Tiny domestic joke, kept gentle.
+        if(cap) cap.textContent = "……多多已经开始在旁边等了。";
+      },450);
+    }
+  });
+});
+
+
+  console.info("[gohome] room-features v1.16 loaded");
 })();
