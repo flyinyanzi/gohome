@@ -242,12 +242,27 @@
       </div>
     </section>
 
-    <section id="study" class="scene room room-study">
-      <button class="back-home">← 回到家里</button>
-      <div class="room-card"><h2>书房</h2><p>以前做过的一些奇怪东西。</p></div>
-      <div class="computer">
-        <a href="games/gomoku/index.html">♟ 技能五子棋</a>
-        <a href="games/mind-reader/index.html">🔮 读心术</a>
+    <section id="study" class="scene room room-study zoomable-scene">
+      <div class="zoom-viewport">
+        <div class="art-stage study-stage" data-zoom-stage>
+          <img class="stage-bg" src="assets/images/study-v1.png" alt="午后暖光里的收藏书房" />
+
+          <button class="back-home study-hit study-back" aria-label="回到小家"><span class="sr-only">回到小家</span></button>
+          <button id="study-books" class="study-hit study-books-hit" aria-label="书架"></button>
+          <button id="study-music" class="study-hit study-music-hit" aria-label="唱片架"></button>
+          <button id="study-game-cabinet" class="study-hit study-game-hit" aria-label="游戏柜"></button>
+          <button id="study-photo-gallery" class="study-hit study-photo-gallery-hit" aria-label="摄影展区"></button>
+          <button id="study-impression-gallery" class="study-hit study-impression-gallery-hit" aria-label="印象派展区"></button>
+          <button id="study-keepsakes" class="study-hit study-keepsakes-hit" aria-label="收藏柜"></button>
+
+          <div id="study-toast" class="bedroom-toast study-toast" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="zoom-controls" aria-label="画面缩放">
+        <button type="button" data-zoom-out aria-label="缩小">−</button>
+        <button type="button" data-zoom-reset aria-label="恢复">⌂</button>
+        <button type="button" data-zoom-in aria-label="放大">＋</button>
       </div>
     </section>
   </main>
@@ -276,6 +291,62 @@
         <button type="button" id="release-bed-note">今晚先不留</button>
       </div>
       <div id="bed-note-list" class="archive"></div>
+    </form>
+  </dialog>
+
+  <dialog id="study-games-panel" class="panel study-games-panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>游戏柜</h3>
+      <p class="panel-lead">现在有两盒游戏。以后还可以慢慢放新的进来。</p>
+      <div class="study-game-shelf">
+        <article class="study-game-card">
+          <div class="game-cover game-cover-mind">24<br>Pieces</div>
+          <div><b>读心术</b><small>一盒有点奇怪的小把戏。</small></div>
+          <a href="http://24pieces.flyinforest.com" target="_blank" rel="noopener">▶ 玩一会儿</a>
+        </article>
+        <article class="study-game-card">
+          <div class="game-cover game-cover-five">Five<br>In A Row</div>
+          <div><b>技能五子棋</b><small>以前做过的五子棋。</small></div>
+          <a href="http://fiveinarow.flyinforest.com" target="_blank" rel="noopener">▶ 玩一会儿</a>
+        </article>
+        <div class="empty-game-slot">＋<br><small>下一盒游戏</small></div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="study-collection-panel" class="panel study-collection-panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3 id="study-collection-title">收藏</h3>
+      <p id="study-collection-lead" class="panel-lead"></p>
+
+      <div class="study-add-form">
+        <input id="study-item-title" placeholder="名字" maxlength="80">
+        <input id="study-item-meta" placeholder="作者 / 歌手 / 时间（可选）" maxlength="100">
+        <textarea id="study-item-note" placeholder="想记住的一句话（可选）" maxlength="300"></textarea>
+        <button type="button" id="save-study-item">放进去</button>
+      </div>
+
+      <div id="study-collection-list" class="study-collection-list"></div>
+    </form>
+  </dialog>
+
+  <dialog id="study-gallery-panel" class="panel study-gallery-panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3 id="study-gallery-title">小画展</h3>
+      <p id="study-gallery-lead" class="panel-lead"></p>
+
+      <div class="gallery-viewer">
+        <button type="button" id="gallery-prev" class="gallery-nav" aria-label="上一张">‹</button>
+        <figure>
+          <img id="study-gallery-image" alt="">
+          <figcaption id="study-gallery-caption"></figcaption>
+        </figure>
+        <button type="button" id="gallery-next" class="gallery-nav" aria-label="下一张">›</button>
+      </div>
+      <div id="study-gallery-dots" class="gallery-dots"></div>
     </form>
   </dialog>
 
@@ -397,11 +468,11 @@
     </form>
   </dialog>
 
-  <script src="js/storage.js?v=1.17"></script>
-  <script src="js/rooms.js?v=1.17"></script>
-  <script src="js/interactions.js?v=1.17"></script>
-  <script src="js/room-features.js?v=1.17"></script>
-  <script src="js/zoom.js?v=1.17"></script>
-  <script src="js/app.js?v=1.17"></script>
+  <script src="js/storage.js?v=1.18"></script>
+  <script src="js/rooms.js?v=1.18"></script>
+  <script src="js/interactions.js?v=1.18"></script>
+  <script src="js/room-features.js?v=1.18"></script>
+  <script src="js/zoom.js?v=1.18"></script>
+  <script src="js/app.js?v=1.18"></script>
 </body>
 </html>

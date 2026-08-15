@@ -174,3 +174,20 @@ document.querySelector('[data-panel="wish-panel"]').addEventListener(...)
 - 玩具区有第一版滚动小球；猫爬架有随机反馈。
 - “今日多多”按本地系统日期做日期哈希，同一天固定一句。
 - 所有 JS 缓存版本更新为 `?v=1.17`。
+
+
+## V1.18 书房第一版
+- 使用已确认的暖色书房图 `assets/images/study-v1.png`，不再重新改变其构图与色调。
+- 游戏柜：
+  - `24 Pieces / 读心术` → `http://24pieces.flyinforest.com`
+  - `Five In A Row / 技能五子棋` → `http://fiveinarow.flyinforest.com`
+  - 保留一个空卡位，方便以后继续增加小游戏。
+- 本地收藏：
+  - 书架、唱片架、玩过的游戏、小收藏均可自行新增条目。
+  - 数据沿用 IndexedDB `qixi-home`，刷新后仍会保留。
+  - 可以用“×”把条目从收藏里取下来。
+- 小画展：
+  - 暗色摄影展区接入用户提供的 10 张照片。
+  - 明亮画展区接入用户提供的 10 张印象派作品照片。
+  - 支持左右翻页和圆点跳转。
+- 所有 JS 缓存版本更新为 `?v=1.18`。
