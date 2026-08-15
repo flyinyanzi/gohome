@@ -249,5 +249,5 @@
   });
 
   // Tiny dev marker in console, useful for GitHub Pages cache/deploy checking.
-  console.info("[gohome] room-features v1.14 loaded");
+  console.info("[gohome] room-features v1.15 loaded");
 })();

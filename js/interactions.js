@@ -147,6 +147,34 @@ function escapeHtml(s){
   return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 }
 
-document.querySelector('[data-panel="note-panel"]').addEventListener("click",()=>renderArchive("note",document.getElementById("note-list"),x=>`<article><small>${when(x.createdAt)}</small><div>${escapeHtml(x.data.text)}</div></article>`));
-document.querySelector('[data-panel="wish-panel"]').addEventListener("click",()=>renderArchive("wish",document.getElementById("wish-list"),x=>`<article><small>${when(x.createdAt)}</small><div>✦ ${escapeHtml(x.data.text)}</div></article>`));
-document.querySelector('[data-panel="dream-panel"]').addEventListener("click",()=>renderArchive("dream",document.getElementById("dream-list"),x=>`<article><small>${when(x.createdAt)}</small><div><b>梦：</b>${escapeHtml(x.data.original||"……")}</div><div><b>新的结局：</b>${escapeHtml(x.data.rewrite||"……")}</div></article>`));
+function bindArchiveTrigger(selector, handler){
+  const el = document.querySelector(selector);
+  if(!el) return;
+  el.addEventListener("click", handler);
+}
+
+bindArchiveTrigger('[data-panel="note-panel"]', ()=>{
+  renderArchive(
+    "note",
+    document.getElementById("note-list"),
+    x=>`<article><small>${when(x.createdAt)}</small><div>${escapeHtml(x.data.text)}</div></article>`
+  );
+});
+
+// The old [data-panel="wish-panel"] trigger was removed when balcony was redesigned.
+// Keeping this optional means future removals cannot stop the rest of interactions.js.
+bindArchiveTrigger('[data-panel="wish-panel"]', ()=>{
+  renderArchive(
+    "wish",
+    document.getElementById("wish-list"),
+    x=>`<article><small>${when(x.createdAt)}</small><div>✦ ${escapeHtml(x.data.text)}</div></article>`
+  );
+});
+
+bindArchiveTrigger('[data-panel="dream-panel"]', ()=>{
+  renderArchive(
+    "dream",
+    document.getElementById("dream-list"),
+    x=>`<article><small>${when(x.createdAt)}</small><div><b>梦：</b>${escapeHtml(x.data.original||"……")}</div><div><b>新的结局：</b>${escapeHtml(x.data.rewrite||"……")}</div></article>`
+  );
+});
