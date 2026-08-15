@@ -35,3 +35,13 @@ async function getMemories(type){
     req.onerror=()=>reject(req.error);
   });
 }
+
+async function deleteMemory(id){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE,"readwrite");
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}

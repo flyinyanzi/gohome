@@ -464,5 +464,171 @@ $("cat-calendar")?.addEventListener("click",()=>{
 });
 
 
-  console.info("[gohome] room-features v1.17 loaded");
+
+// =========================
+// Study
+// =========================
+function studySay(text){ flash("study-toast", text, 2100); }
+
+$("study-game-cabinet")?.addEventListener("click", ()=>{
+  $("study-games-panel")?.showModal();
+});
+
+const studyCollections = {
+  books: {
+    title:"书架",
+    lead:"看过的、想记住的书，都可以慢慢放进来。",
+    type:"study-book",
+    button:"放到书架上"
+  },
+  music: {
+    title:"唱片架",
+    lead:"听过的歌、喜欢的专辑，在这里留一个位置。",
+    type:"study-music",
+    button:"放进唱片架"
+  },
+  games: {
+    title:"玩过的游戏",
+    lead:"这里记录真正玩过、喜欢过的游戏；自己做的小游戏在旁边的游戏柜。",
+    type:"study-played-game",
+    button:"收进游戏收藏"
+  },
+  keepsakes: {
+    title:"小小的收藏",
+    lead:"票根、小摆件、旅行带回来的东西……没有分类也没关系。",
+    type:"study-keepsake",
+    button:"收好它"
+  }
+};
+let currentStudyCollection = "books";
+
+async function renderStudyCollection(){
+  const cfg = studyCollections[currentStudyCollection];
+  const list = $("study-collection-list");
+  if(!cfg || !list || typeof getMemories !== "function") return;
+  const rows = await getMemories(cfg.type);
+
+  if(!rows.length){
+    list.innerHTML = `<div class="empty-collection">这里还有很多空位置。</div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(x=>`
+    <article class="collection-item">
+      <button type="button" class="collection-remove" data-memory-id="${x.id}" title="从这里取下来">×</button>
+      <b>${safe(x.data.title||"未命名")}</b>
+      ${x.data.meta ? `<small>${safe(x.data.meta)}</small>` : ""}
+      ${x.data.note ? `<p>${safe(x.data.note)}</p>` : ""}
+    </article>
+  `).join("");
+
+  list.querySelectorAll(".collection-remove").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      if(typeof deleteMemory === "function"){
+        await deleteMemory(Number(btn.dataset.memoryId));
+        await renderStudyCollection();
+        studySay("从这里取下来了。");
+      }
+    });
+  });
+}
+
+async function openStudyCollection(kind){
+  currentStudyCollection = kind;
+  const cfg = studyCollections[kind];
+  if(!cfg) return;
+  $("study-collection-title").textContent = cfg.title;
+  $("study-collection-lead").textContent = cfg.lead;
+  $("save-study-item").textContent = cfg.button;
+  $("study-item-title").value = "";
+  $("study-item-meta").value = "";
+  $("study-item-note").value = "";
+  await renderStudyCollection();
+  $("study-collection-panel")?.showModal();
+}
+
+$("study-books")?.addEventListener("click", ()=>openStudyCollection("books"));
+$("study-music")?.addEventListener("click", ()=>openStudyCollection("music"));
+
+// A tap on the physical retro console area records played games;
+// the game-card cabinet itself opens the two handmade games.
+$("study-keepsakes")?.addEventListener("click", ()=>openStudyCollection("keepsakes"));
+
+$("save-study-item")?.addEventListener("click", async ()=>{
+  const cfg = studyCollections[currentStudyCollection];
+  const title = $("study-item-title")?.value.trim();
+  if(!cfg || !title || typeof addMemory !== "function") return;
+  await addMemory(cfg.type,{
+    title,
+    meta:$("study-item-meta")?.value.trim() || "",
+    note:$("study-item-note")?.value.trim() || ""
+  });
+  $("study-item-title").value="";
+  $("study-item-meta").value="";
+  $("study-item-note").value="";
+  await renderStudyCollection();
+  studySay("放好了。");
+});
+
+// Long press / secondary access is unnecessary on mobile, so use the small
+// retro console zone inside the music/game shelf for played-game collection.
+const studyPlayedGameHit = document.createElement("button");
+studyPlayedGameHit.type = "button";
+studyPlayedGameHit.className = "study-hit";
+studyPlayedGameHit.setAttribute("aria-label","玩过的游戏收藏");
+studyPlayedGameHit.style.cssText = "left:720px;top:440px;width:115px;height:125px;";
+document.querySelector(".study-stage")?.appendChild(studyPlayedGameHit);
+studyPlayedGameHit.addEventListener("click", ()=>openStudyCollection("games"));
+
+const studyGalleries = {
+  photo: {
+    title:"一起看过的摄影展",
+    lead:"把当时停下来多看了一会儿的画面，重新挂在这里。",
+    files:Array.from({length:10},(_,i)=>`assets/images/study/gallery/photo-${String(i+1).padStart(2,"0")}.jpeg`)
+  },
+  impression: {
+    title:"分享过的印象派",
+    lead:"曾经分享过的颜色和风景，在这里慢慢看。",
+    files:Array.from({length:10},(_,i)=>`assets/images/study/gallery/impression-${String(i+1).padStart(2,"0")}.jpeg`)
+  }
+};
+let activeGallery = "photo";
+let galleryIndex = 0;
+
+function renderStudyGallery(){
+  const cfg = studyGalleries[activeGallery];
+  if(!cfg) return;
+  galleryIndex = (galleryIndex + cfg.files.length) % cfg.files.length;
+  $("study-gallery-title").textContent = cfg.title;
+  $("study-gallery-lead").textContent = cfg.lead;
+  $("study-gallery-image").src = cfg.files[galleryIndex];
+  $("study-gallery-image").alt = `${cfg.title} 第 ${galleryIndex+1} 幅`;
+  $("study-gallery-caption").textContent = `${galleryIndex+1} / ${cfg.files.length}`;
+
+  const dots = $("study-gallery-dots");
+  if(dots){
+    dots.innerHTML = cfg.files.map((_,i)=>`<button type="button" data-gallery-index="${i}" class="${i===galleryIndex?"active":""}" aria-label="第 ${i+1} 幅"></button>`).join("");
+    dots.querySelectorAll("button").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        galleryIndex = Number(btn.dataset.galleryIndex);
+        renderStudyGallery();
+      });
+    });
+  }
+}
+
+function openStudyGallery(kind){
+  activeGallery = kind;
+  galleryIndex = 0;
+  renderStudyGallery();
+  $("study-gallery-panel")?.showModal();
+}
+
+$("study-photo-gallery")?.addEventListener("click", ()=>openStudyGallery("photo"));
+$("study-impression-gallery")?.addEventListener("click", ()=>openStudyGallery("impression"));
+$("gallery-prev")?.addEventListener("click", ()=>{galleryIndex--;renderStudyGallery();});
+$("gallery-next")?.addEventListener("click", ()=>{galleryIndex++;renderStudyGallery();});
+
+
+  console.info("[gohome] room-features v1.18 loaded");
 })();
