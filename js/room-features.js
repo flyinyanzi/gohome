@@ -417,7 +417,13 @@ function renderCatAlbum(filter="all"){
   grid.innerHTML=rows.map(p=>`<button type="button"><img src="${p.src}" alt="${safe(p.label)}"><small>${safe(p.label)}</small></button>`).join("");
 }
 
-$("cat-photo-wall")?.addEventListener("click",()=>{renderCatAlbum("all");$("cat-album-panel")?.showModal();});
+$("cat-photo-wall")?.addEventListener("click",()=>{
+    // V2.3: reopening the album always returns both data and visible tab state to “全部”.
+    document.querySelectorAll("[data-album-filter]").forEach(b=>b.classList.remove("active"));
+    document.querySelector('[data-album-filter="all"]')?.classList.add("active");
+    renderCatAlbum("all");
+    $("cat-album-panel")?.showModal();
+  });
 document.querySelectorAll("[data-album-filter]").forEach(btn=>btn.addEventListener("click",()=>{
   document.querySelectorAll("[data-album-filter]").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderCatAlbum(btn.dataset.albumFilter);
 }));
@@ -630,5 +636,5 @@ $("gallery-prev")?.addEventListener("click", ()=>{galleryIndex--;renderStudyGall
 $("gallery-next")?.addEventListener("click", ()=>{galleryIndex++;renderStudyGallery();});
 
 
-  console.info("[gohome] room-features v1.18 loaded");
+  console.info("[gohome] room-features v2.3 loaded");
 })();
