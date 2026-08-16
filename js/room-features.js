@@ -636,5 +636,32 @@ $("gallery-prev")?.addEventListener("click", ()=>{galleryIndex--;renderStudyGall
 $("gallery-next")?.addEventListener("click", ()=>{galleryIndex++;renderStudyGallery();});
 
 
-  console.info("[gohome] room-features v2.3 loaded");
+
+// =========================
+// Living room: window night view (V2.4)
+// =========================
+const livingWindow = $("living-window");
+const livingSky = $("living-window-stars");
+
+livingWindow?.addEventListener("click", ()=>{
+  if(!livingSky) return;
+
+  clearTimeout(livingSky.__hideTimer);
+
+  // Restart the shooting-star animation every time.
+  livingSky.classList.remove("hidden", "play");
+  void livingSky.offsetWidth;
+  livingSky.classList.add("play");
+
+  flash("toast", "外面的灯还亮着。", 1800);
+
+  // Leave the twinkling lights for a little while after the shooting star.
+  livingSky.__hideTimer = setTimeout(()=>{
+    livingSky.classList.remove("play");
+    livingSky.classList.add("hidden");
+  }, 7200);
+});
+
+
+  console.info("[gohome] room-features v2.4 loaded");
 })();

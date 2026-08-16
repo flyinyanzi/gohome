@@ -3,14 +3,14 @@
   const ART_W = 1536;
   const ART_H = 1024;
 
-  // V2.2 dialog pinch zoom.
-  // Keep Safari page zoom disabled while a modal is open, but give each
-  // dialog its own independent two-finger zoom/pan state instead.
+  // V2.4 dialog pinch zoom + iOS keyboard safety.
+  // Safari page zoom and our dialog transform are two different layers.
+  // We prevent focus-induced page zoom via >=16px controls in CSS, and also
+  // hard-reset each dialog's custom transform every time it opens/closes.
   function modalIsOpen(){
     return !!document.querySelector("dialog[open]");
   }
 
-  // Safari's legacy gesture events must never reach the page while a modal is open.
   ["gesturestart","gesturechange","gestureend"].forEach(type=>{
     document.addEventListener(type, e=>{
       if(modalIsOpen()) e.preventDefault();
@@ -34,6 +34,15 @@
 
     const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
 
+    function resetDialogTransform(){
+      scale = 1;
+      panX = 0;
+      panY = 0;
+      pinching = false;
+      startDistance = 0;
+      surface.style.transform = "";
+    }
+
     function applyDialogTransform(){
       if(scale <= 1.001){
         scale = 1;
@@ -41,8 +50,6 @@
         panY = 0;
       }
 
-      // Approximate safe pan bounds from the visible modal size. This keeps
-      // zoomed content reachable without letting it disappear completely.
       const rect = dialog.getBoundingClientRect();
       const maxX = Math.max(0, rect.width * (scale - 1) * .5 + 55);
       const maxY = Math.max(0, rect.height * (scale - 1) * .5 + 55);
@@ -63,6 +70,16 @@
       };
     }
 
+    // Reset not only on close, but also on every OPEN. This prevents a prior
+    // modal or keyboard/viewport episode from leaking custom scale state.
+    const openObserver = new MutationObserver(()=>{
+      if(dialog.hasAttribute("open")){
+        resetDialogTransform();
+        requestAnimationFrame(resetDialogTransform);
+      }
+    });
+    openObserver.observe(dialog,{attributes:true,attributeFilter:["open"]});
+
     dialog.addEventListener("touchstart", e=>{
       if(e.touches.length !== 2) return;
       e.preventDefault();
@@ -78,8 +95,6 @@
 
     dialog.addEventListener("touchmove", e=>{
       if(e.touches.length >= 2){
-        // This is the key V2.2 behavior: consume the gesture here rather than
-        // allowing Safari to zoom the entire document / visualViewport.
         e.preventDefault();
         if(!pinching){
           pinching=true;
@@ -101,13 +116,31 @@
     dialog.addEventListener("touchend", e=>{
       if(e.touches.length < 2) pinching=false;
     }, {passive:false, capture:true});
-    dialog.addEventListener("touchcancel", ()=>{pinching=false;}, {passive:false, capture:true});
 
-    // Reset every modal when it closes. The underlying room keeps its own
-    // zoom/pan exactly where it was.
+    dialog.addEventListener("touchcancel", ()=>{ pinching=false; }, {passive:false, capture:true});
+
+    dialog.addEventListener("focusin", e=>{
+      if(!e.target.matches("input,textarea,select,[contenteditable='true']")) return;
+      dialog.classList.add("is-editing");
+
+      // A normal text focus is never intended to inherit pinch zoom.
+      // Reset first, then let the keyboard resize only the visual viewport.
+      resetDialogTransform();
+      requestAnimationFrame(resetDialogTransform);
+    });
+
+    dialog.addEventListener("focusout", e=>{
+      if(!e.target.matches("input,textarea,select,[contenteditable='true']")) return;
+      dialog.classList.remove("is-editing");
+
+      // iOS may settle visualViewport over a few frames after keyboard close.
+      setTimeout(resetDialogTransform, 60);
+      setTimeout(resetDialogTransform, 260);
+    });
+
     dialog.addEventListener("close", ()=>{
-      scale=1; panX=0; panY=0; pinching=false;
-      surface.style.transform="";
+      dialog.classList.remove("is-editing");
+      resetDialogTransform();
     });
   });
 
@@ -330,6 +363,13 @@
     // Re-fit after those changes, not just after orientation changes.
     let resizeTimer;
     function scheduleRefit(){
+      // Do not refit the underlying room while Safari's software keyboard is
+      // changing visualViewport for an input inside an open dialog.
+      const active = document.activeElement;
+      const editingDialog = active?.closest?.("dialog[open]");
+      const isEditor = !!active?.matches?.("input,textarea,select,[contenteditable='true']");
+      if(editingDialog && isEditor) return;
+
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(fitToScreen, 80);
     }
