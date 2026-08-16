@@ -1,5 +1,12 @@
 
 (() => {
+  // V2.5: keep Safari's OUTER page scale at 1x.
+  // Room and dialog pinch zoom are implemented by this app itself.
+  ["gesturestart","gesturechange","gestureend"].forEach(type=>{
+    document.addEventListener(type, e=>e.preventDefault(), {passive:false, capture:true});
+  });
+
+
   const ART_W = 1536;
   const ART_H = 1024;
 

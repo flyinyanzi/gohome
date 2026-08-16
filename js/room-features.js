@@ -663,5 +663,5 @@ livingWindow?.addEventListener("click", ()=>{
 });
 
 
-  console.info("[gohome] room-features v2.4 loaded");
+  console.info("[gohome] room-features v2.5 loaded");
 })();
