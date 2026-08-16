@@ -191,11 +191,9 @@
       clearTimeout(star.__timer);
       star.__timer=setTimeout(()=>star.classList.add("hidden"),1600);
     }
-    flash("balcony-toast","抓到了。要不要替它留一个愿望？",2200);
+    flash("balcony-toast","抓到了。趁它还没飞远，许个愿吧。",2200);
     setTimeout(showWishPanel,650);
   });
-
-  $("balcony-write-wish")?.addEventListener("click", showWishPanel);
 
   async function renderBalconyWishes(){
     await listMemories(
@@ -205,8 +203,8 @@
   }
 
   $("balcony-wish-box")?.addEventListener("click", async ()=>{
-    showWishPanel();
     await renderBalconyWishes();
+    $("balcony-wish-box-panel")?.showModal();
   });
 
   $("save-balcony-wish")?.addEventListener("click", async ()=>{
@@ -214,8 +212,8 @@
     if(!input?.value.trim() || typeof addMemory !== "function") return;
     await addMemory("balcony-wish",{text:input.value.trim()});
     input.value="";
-    await renderBalconyWishes();
-    flash("balcony-toast","愿望留在这里了。",2200);
+    $("balcony-wish-panel")?.close();
+    flash("balcony-toast","收进愿望盒子里了。",2200);
   });
 
   $("send-balcony-wish")?.addEventListener("click", ()=>{
@@ -663,5 +661,5 @@ livingWindow?.addEventListener("click", ()=>{
 });
 
 
-  console.info("[gohome] room-features v2.5 loaded");
+  console.info("[gohome] room-features v2.6 loaded");
 })();

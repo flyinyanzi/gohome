@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>回来啦</title>
-  <link rel="stylesheet" href="css/main.css?v=2.5" />
-  <link rel="stylesheet" href="css/rooms.css?v=2.5" />
-  <link rel="stylesheet" href="css/animations.css?v=2.5" />
+  <link rel="stylesheet" href="css/main.css?v=2.6" />
+  <link rel="stylesheet" href="css/rooms.css?v=2.6" />
+  <link rel="stylesheet" href="css/animations.css?v=2.6" />
 </head>
 <body>
   <main id="app">
@@ -226,7 +226,6 @@
 
           <button class="back-home balcony-hit balcony-back" aria-label="回到小家"><span class="sr-only">回到小家</span></button>
           <button id="balcony-shooting-star" class="balcony-hit balcony-star" aria-label="抓流星"></button>
-          <button id="balcony-write-wish" class="balcony-hit balcony-write" aria-label="写下愿望"></button>
           <button id="balcony-wish-box" class="balcony-hit balcony-box" aria-label="愿望盒子"></button>
           <button id="balcony-breeze" class="balcony-hit balcony-breeze" aria-label="吹吹风"></button>
           <button id="balcony-dodo" class="balcony-hit balcony-dodo" aria-label="摸摸多多"></button>
@@ -435,13 +434,21 @@
   <dialog id="balcony-wish-panel" class="panel">
     <form method="dialog">
       <button class="close">×</button>
-      <h3>写下一个愿望</h3>
-      <p class="panel-lead">不用很伟大。今天希望发生的小事，也算愿望。</p>
+      <h3>抓住了一颗流星</h3>
+      <p class="panel-lead">趁它还没飞远，偷偷许一个愿吧。</p>
       <textarea id="balcony-wish-input" placeholder="比如：今晚睡个好觉。"></textarea>
       <div class="actions">
-        <button type="button" id="save-balcony-wish">留在愿望盒子里</button>
+        <button type="button" id="save-balcony-wish">收进愿望盒子</button>
         <button type="button" id="send-balcony-wish">送给星星</button>
       </div>
+    </form>
+  </dialog>
+
+  <dialog id="balcony-wish-box-panel" class="panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>愿望盒子</h3>
+      <p class="panel-lead">以前留下来的愿望，都好好收在这里。</p>
       <div id="balcony-wish-list" class="archive"></div>
     </form>
   </dialog>
@@ -474,11 +481,11 @@
     </form>
   </dialog>
 
-  <script src="js/storage.js?v=2.5"></script>
-  <script src="js/rooms.js?v=2.5"></script>
-  <script src="js/interactions.js?v=2.5"></script>
-  <script src="js/room-features.js?v=2.5"></script>
-  <script src="js/zoom.js?v=2.5"></script>
-  <script src="js/app.js?v=2.5"></script>
+  <script src="js/storage.js?v=2.6"></script>
+  <script src="js/rooms.js?v=2.6"></script>
+  <script src="js/interactions.js?v=2.6"></script>
+  <script src="js/room-features.js?v=2.6"></script>
+  <script src="js/zoom.js?v=2.6"></script>
+  <script src="js/app.js?v=2.6"></script>
 </body>
 </html>
