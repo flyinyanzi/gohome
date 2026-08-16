@@ -54,45 +54,132 @@ document.querySelector('[data-room="living-room"]').addEventListener("click",()=
   setTimeout(()=>document.getElementById("living-hint")?.classList.add("hide"),6500);
 });
 
-// 唱片小游戏：把唱片拖到唱片机转盘中央
+// 唱片机 V2.7：拖唱片 -> 吸附到转盘 -> 点击唱针随机播放
 const disc = document.getElementById("record-disc");
-const target = document.getElementById("record-target");
+const sleeve = document.querySelector(".record-sleeve");
+const dropZone = document.getElementById("record-drop-zone");
+const needle = document.getElementById("record-needle");
+const turntableDisc = document.getElementById("record-on-turntable");
 
-function finishRecordGame(){
-  target.classList.remove("record-ready");
-  target.classList.add("record-success");
-  const sleeve=document.querySelector(".record-sleeve");
-  if(sleeve) sleeve.style.opacity="0";
-  disc.style.opacity="0";
-  disc.style.pointerEvents="none";
-  say("放好了。给自己听一首歌吧。");
+let recordPlaced = false;
+let recordDrag = null;
+
+function resetLooseRecord(){
+  if(!disc) return;
+  disc.style.left="";
+  disc.style.top="";
+  disc.style.transform="";
 }
 
-disc.addEventListener("dragstart",e=>{
-  e.dataTransfer.setData("text/plain","record");
-  target.classList.add("record-ready");
-});
-disc.addEventListener("dragend",()=>target.classList.remove("record-ready"));
-target.addEventListener("dragover",e=>e.preventDefault());
-target.addEventListener("drop",e=>{
-  e.preventDefault();
-  if(e.dataTransfer.getData("text/plain")==="record") finishRecordGame();
+function placeRecord(){
+  if(recordPlaced) return;
+  recordPlaced=true;
+  sleeve?.classList.add("record-sleeve-empty");
+  if(disc){
+    disc.style.opacity="0";
+    disc.style.pointerEvents="none";
+  }
+  turntableDisc?.classList.add("placed");
+  needle?.classList.add("armed");
+  say("唱片放好了。点一下唱针吧。");
+}
+
+function removeRecord(){
+  recordPlaced=false;
+  needle?.classList.remove("down","armed");
+  turntableDisc?.classList.remove("placed","playing");
+  sleeve?.classList.remove("record-sleeve-empty");
+  if(disc){
+    disc.style.opacity="1";
+    disc.style.pointerEvents="auto";
+  }
+  resetLooseRecord();
+}
+
+if(disc && dropZone){
+  disc.addEventListener("pointerdown",e=>{
+    if(recordPlaced) return;
+    if(e.pointerType==="mouse" && e.button!==0) return;
+    recordDrag={
+      pointerId:e.pointerId,
+      startX:e.clientX,
+      startY:e.clientY,
+      baseLeft:disc.offsetLeft,
+      baseTop:disc.offsetTop
+    };
+    disc.setPointerCapture?.(e.pointerId);
+    disc.classList.add("dragging");
+    e.preventDefault();
+  });
+
+  disc.addEventListener("pointermove",e=>{
+    if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
+    const stage=document.querySelector("#living-room [data-zoom-stage]");
+    if(!stage) return;
+    const r=stage.getBoundingClientRect();
+    const sx=r.width/1536;
+    const sy=r.height/1024;
+    disc.style.left=`${recordDrag.baseLeft+(e.clientX-recordDrag.startX)/Math.max(.001,sx)}px`;
+    disc.style.top=`${recordDrag.baseTop+(e.clientY-recordDrag.startY)/Math.max(.001,sy)}px`;
+  });
+
+  const finish=e=>{
+    if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
+    disc.releasePointerCapture?.(e.pointerId);
+    disc.classList.remove("dragging");
+    const r=dropZone.getBoundingClientRect();
+    const inside=e.clientX>=r.left && e.clientX<=r.right && e.clientY>=r.top && e.clientY<=r.bottom;
+    inside ? placeRecord() : resetLooseRecord();
+    recordDrag=null;
+  };
+  disc.addEventListener("pointerup",finish);
+  disc.addEventListener("pointercancel",e=>{
+    if(recordDrag?.pointerId!==e.pointerId) return;
+    disc.classList.remove("dragging");
+    resetLooseRecord();
+    recordDrag=null;
+  });
+}
+
+needle?.addEventListener("click",async()=>{
+  if(!recordPlaced){
+    say("先把唱片放上去吧。");
+    return;
+  }
+  if(!window.HomeMusic?.hasTracks()){
+    say("播放清单还是空的。");
+    window.HomeMusic?.openPlaylist();
+    return;
+  }
+
+  if(window.HomeMusic.isPlaying()){
+    window.HomeMusic.pause();
+    needle.classList.remove("down");
+    turntableDisc?.classList.remove("playing");
+    say("唱针抬起来了。");
+    return;
+  }
+
+  if(!needle.classList.contains("down")){
+    needle.classList.add("down");
+    const ok=await window.HomeMusic.playRandom();
+    if(ok) turntableDisc?.classList.add("playing");
+  }else{
+    const ok=await window.HomeMusic.resume();
+    if(ok) turntableDisc?.classList.add("playing");
+  }
 });
 
-let pointerDragging = false;
-disc.addEventListener("pointerdown",e=>{
-  pointerDragging = true;
-  disc.setPointerCapture?.(e.pointerId);
-  target.classList.add("record-ready");
+// 点已经放好的唱片：换下一张。下一次落针重新随机一首。
+turntableDisc?.addEventListener("click",()=>{
+  if(!recordPlaced) return;
+  window.HomeMusic?.pause();
+  removeRecord();
+  say("换一张唱片吧。");
 });
-disc.addEventListener("pointerup",e=>{
-  if(!pointerDragging) return;
-  pointerDragging = false;
-  target.classList.remove("record-ready");
-  const r = target.getBoundingClientRect();
-  if(e.clientX>=r.left && e.clientX<=r.right && e.clientY>=r.top && e.clientY<=r.bottom){
-    finishRecordGame();
-  }
+
+document.getElementById("living-playlist")?.addEventListener("click",()=>{
+  window.HomeMusic?.openPlaylist();
 });
 
 // ===== 其他房间原有交互 =====

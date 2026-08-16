@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>回来啦</title>
-  <link rel="stylesheet" href="css/main.css?v=2.6" />
-  <link rel="stylesheet" href="css/rooms.css?v=2.6" />
-  <link rel="stylesheet" href="css/animations.css?v=2.6" />
+  <link rel="stylesheet" href="css/main.css?v=2.7" />
+  <link rel="stylesheet" href="css/rooms.css?v=2.7" />
+  <link rel="stylesheet" href="css/animations.css?v=2.7" />
 </head>
 <body>
   <main id="app">
@@ -57,19 +57,20 @@
           <button id="floor-lamp" class="living-hit hit-lamp" aria-label="调节落地灯亮度"></button>
           <button id="slow-down" class="living-hit hit-breathe" aria-label="慢一点"></button>
           <button id="living-window" class="living-hit hit-living-window" aria-label="看看窗外夜景"></button>
+          <button id="living-playlist" class="living-hit hit-playlist" aria-label="播放清单"></button>
 
           <div id="living-window-stars" class="living-window-stars hidden" aria-hidden="true">
             <i></i><i></i><i></i><i></i><i></i><i></i>
             <span id="living-shooting-star" class="living-shooting-star"></span>
           </div>
 
-          <div id="record-game" class="record-game" aria-label="唱片小游戏">
-            <div class="record-sleeve" aria-hidden="true">
-              <div id="record-disc" class="record-disc" draggable="true" title="把唱片放到转盘中央"></div>
+          <div id="record-game" class="record-game" aria-label="唱片机小游戏">
+            <div class="record-sleeve">
+              <div id="record-disc" class="record-disc" role="button" tabindex="0" aria-label="唱片，拖到唱片机上"></div>
             </div>
-            <div id="record-target" class="record-target" title="唱片机转盘中央">
-              <span class="spindle"></span>
-            </div>
+            <div id="record-drop-zone" class="record-drop-zone" aria-hidden="true"></div>
+            <button id="record-needle" class="record-needle-hotspot" type="button" aria-label="唱针"></button>
+            <div id="record-on-turntable" class="record-on-turntable" aria-label="已经放好的唱片"></div>
           </div>
 
           <div id="breathing-orb" class="breathing-orb hidden">
@@ -272,7 +273,36 @@
     </section>
   </main>
 
-  <dialog id="note-panel" class="panel">
+    <dialog id="music-playlist-panel" class="panel music-playlist-panel">
+    <form method="dialog">
+      <button class="close">×</button>
+      <h3>播放清单</h3>
+      <p class="panel-lead">这个家的音乐，从这里慢慢收藏。</p>
+
+      <div class="music-now-card">
+        <div id="music-now-mark" class="music-now-mark" aria-hidden="true">♪</div>
+        <div class="music-now-copy">
+          <small>正在播放</small>
+          <b id="music-now-title">还没有音乐</b>
+          <span id="music-now-artist"></span>
+        </div>
+      </div>
+
+      <div class="music-controls">
+        <button type="button" id="music-prev" aria-label="上一首">‹</button>
+        <button type="button" id="music-toggle" aria-label="播放或暂停">▶</button>
+        <button type="button" id="music-next" aria-label="下一首">›</button>
+        <button type="button" id="music-random" class="music-random active" aria-label="随机播放">随机</button>
+      </div>
+
+      <div id="music-track-list" class="music-track-list"></div>
+      <p id="music-empty-hint" class="music-empty-hint">
+        这里还没有唱片。把 mp3 放进 <code>assets/audio/</code>，再在 <code>js/music.js</code> 的 PLAYLIST 中登记即可。
+      </p>
+    </form>
+  </dialog>
+
+<dialog id="note-panel" class="panel">
     <form method="dialog">
       <button class="close">×</button>
       <h3>小纸条</h3>
@@ -481,11 +511,12 @@
     </form>
   </dialog>
 
-  <script src="js/storage.js?v=2.6"></script>
-  <script src="js/rooms.js?v=2.6"></script>
-  <script src="js/interactions.js?v=2.6"></script>
-  <script src="js/room-features.js?v=2.6"></script>
-  <script src="js/zoom.js?v=2.6"></script>
-  <script src="js/app.js?v=2.6"></script>
+  <script src="js/storage.js?v=2.7"></script>
+  <script src="js/rooms.js?v=2.7"></script>
+  <script src="js/music.js?v=2.7"></script>
+  <script src="js/interactions.js?v=2.7"></script>
+  <script src="js/room-features.js?v=2.7"></script>
+  <script src="js/zoom.js?v=2.7"></script>
+  <script src="js/app.js?v=2.7"></script>
 </body>
 </html>
