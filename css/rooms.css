@@ -1092,3 +1092,101 @@
   72%{opacity:.9}
   100%{opacity:0;translate:-190px 105px}
 }
+
+
+/* ===== V2.4 客厅窗外：真正的夜景小动作 ===== */
+.living-window-stars{
+  /* Keep all animation strictly inside the painted window. */
+  left:19.2% !important;
+  top:1.5% !important;
+  width:29.2% !important;
+  height:44.5% !important;
+  border-radius:4px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 64% 22%, rgba(255,238,177,.08), transparent 18%),
+    linear-gradient(to bottom, rgba(22,38,65,.05), rgba(6,12,24,.11));
+  opacity:0;
+  transition:opacity .35s ease;
+}
+
+.living-window-stars:not(.hidden){
+  opacity:1;
+}
+
+/* A few new light points appear rather than a flat translucent film. */
+.living-window-stars i{
+  width:6px !important;
+  height:6px !important;
+  background:#fff2b8 !important;
+  box-shadow:
+    0 0 5px #fff6d2,
+    0 0 13px rgba(255,215,121,.9) !important;
+  animation:livingStarTwinkleV24 1.65s ease-in-out infinite alternate !important;
+}
+
+.living-window-stars i:nth-child(1){left:12%!important;top:12%!important;animation-delay:.10s!important}
+.living-window-stars i:nth-child(2){left:34%!important;top:22%!important;animation-delay:.75s!important}
+.living-window-stars i:nth-child(3){left:76%!important;top:10%!important;animation-delay:.35s!important}
+.living-window-stars i:nth-child(4){left:25%!important;top:48%!important;animation-delay:1.05s!important}
+.living-window-stars i:nth-child(5){left:58%!important;top:57%!important;animation-delay:.48s!important}
+.living-window-stars i:nth-child(6){left:86%!important;top:38%!important;animation-delay:1.28s!important}
+
+@keyframes livingStarTwinkleV24{
+  0%{opacity:.18;transform:scale(.55)}
+  55%{opacity:.68;transform:scale(.95)}
+  100%{opacity:1;transform:scale(1.32)}
+}
+
+/* The shooting star is intentionally visible enough to notice, but still soft. */
+.living-shooting-star{
+  left:78% !important;
+  top:14% !important;
+  width:110px !important;
+  height:3px !important;
+  opacity:0;
+  border-radius:999px;
+  transform:rotate(-27deg);
+  background:linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,236,180,.14) 24%,
+    rgba(255,244,205,.72) 72%,
+    #fff9df 100%
+  ) !important;
+  filter:drop-shadow(0 0 7px rgba(255,225,157,.82)) !important;
+}
+
+.living-window-stars.play .living-shooting-star{
+  animation:livingShootV24 1.45s cubic-bezier(.2,.65,.25,1) .45s 1 both !important;
+}
+
+@keyframes livingShootV24{
+  0%{opacity:0;transform:translate(55px,-28px) rotate(-27deg)}
+  12%{opacity:1}
+  68%{opacity:.95}
+  100%{opacity:0;transform:translate(-240px,132px) rotate(-27deg)}
+}
+
+/* Tiny "city breathing" lights near the lower part of the window. */
+.living-window-stars::after{
+  content:"";
+  position:absolute;
+  left:7%;
+  right:4%;
+  bottom:7%;
+  height:35%;
+  opacity:.35;
+  background-image:
+    radial-gradient(circle at 8% 74%, #ffc96c 0 2px, transparent 3px),
+    radial-gradient(circle at 21% 62%, #ffd47d 0 2px, transparent 3px),
+    radial-gradient(circle at 37% 81%, #ffbd55 0 2px, transparent 3px),
+    radial-gradient(circle at 55% 58%, #ffd985 0 2px, transparent 3px),
+    radial-gradient(circle at 69% 77%, #ffc865 0 2px, transparent 3px),
+    radial-gradient(circle at 84% 53%, #ffda87 0 2px, transparent 3px);
+  animation:livingCityLights 2.8s ease-in-out infinite alternate;
+}
+@keyframes livingCityLights{
+  from{opacity:.18;filter:brightness(.85)}
+  to{opacity:.58;filter:brightness(1.25)}
+}

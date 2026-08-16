@@ -238,3 +238,34 @@ dialog.panel > form{
   transform-origin:center center;
   will-change:transform;
 }
+
+
+/* ===== V2.4 iOS Safari input / dialog stability =====
+   Safari may page-zoom a focused form control when its computed font size is
+   below 16 CSS px. Page zoom sits outside our dialog pinch state, so it can
+   make every later dialog look permanently enlarged. Keep editable controls
+   at 16px or above and let our own dialog pinch system handle intentional zoom. */
+dialog.panel input,
+dialog.panel textarea,
+dialog.panel select{
+  font-size:16px !important;
+  line-height:1.45;
+  -webkit-text-size-adjust:100%;
+}
+
+/* During keyboard entry the form itself must not inherit any stale transform.
+   zoom.js also resets each dialog at every open/close. */
+dialog.panel.is-editing > form{
+  transition:none !important;
+}
+
+/* Avoid persistent iOS tap-highlight / hover-like film on transparent room hotspots. */
+.hit-living-window,
+.hit-living-window:hover,
+.hit-living-window:focus,
+.hit-living-window:focus-visible,
+.hit-living-window:active{
+  background:transparent !important;
+  box-shadow:none !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
