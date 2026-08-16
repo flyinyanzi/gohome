@@ -991,3 +991,31 @@
   .gallery-viewer{grid-template-columns:38px minmax(0,1fr) 38px}
   .gallery-nav{width:36px;height:36px;font-size:26px}
 }
+
+
+/* ===== V2.1 visible room return button ===== */
+.visible-room-back{
+  position:absolute;
+  left:calc(16px + env(safe-area-inset-left, 0px));
+  top:calc(16px + env(safe-area-inset-top, 0px));
+  z-index:45;
+  width:auto !important;
+  height:auto !important;
+  min-width:74px;
+  min-height:38px;
+  padding:8px 13px;
+  border:1px solid rgba(255,255,255,.38);
+  border-radius:999px;
+  background:rgba(54,42,30,.58);
+  color:#fff8ea;
+  font:600 14px/1 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  letter-spacing:.02em;
+  box-shadow:0 4px 16px rgba(35,24,15,.18);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.visible-room-back:active{
+  transform:scale(.97);
+}
