@@ -221,3 +221,15 @@ html, body{
   height:58px !important;
   border-radius:24px !important;
 }
+
+
+/* ===== V2.0 gesture safety =====
+   Room canvases own pinch/pan; open modal panels must not leak a two-finger
+   gesture to Safari's page zoom/navigation layer. */
+dialog[open],
+dialog[open]::backdrop{
+  overscroll-behavior:none;
+}
+dialog[open]{
+  touch-action:pan-x pan-y;
+}

@@ -3,6 +3,32 @@
   const ART_W = 1536;
   const ART_H = 1024;
 
+  // V2.0 modal guard:
+  // When a native <dialog> is open, a two-finger gesture belongs to the
+  // overlay itself. Prevent Safari from interpreting it as browser/page zoom,
+  // which can disturb the app's visual viewport and scene state.
+  function modalIsOpen(){
+    return !!document.querySelector("dialog[open]");
+  }
+
+  document.addEventListener("touchmove", e => {
+    if (modalIsOpen() && e.touches && e.touches.length > 1){
+      e.preventDefault();
+    }
+  }, {passive:false, capture:true});
+
+  document.addEventListener("gesturestart", e => {
+    if (modalIsOpen()) e.preventDefault();
+  }, {passive:false, capture:true});
+
+  document.addEventListener("gesturechange", e => {
+    if (modalIsOpen()) e.preventDefault();
+  }, {passive:false, capture:true});
+
+  document.addEventListener("gestureend", e => {
+    if (modalIsOpen()) e.preventDefault();
+  }, {passive:false, capture:true});
+
   document.querySelectorAll(".zoomable-scene").forEach(scene => {
     const viewport = scene.querySelector(".zoom-viewport");
     const stage = scene.querySelector("[data-zoom-stage]");
@@ -122,18 +148,33 @@
       zoomBy(e.deltaY < 0 ? 1.08 : 1 / 1.08);
     }, {passive:false});
 
-    viewport.addEventListener("pointerdown", e => {
-      if (e.target.closest("button,a,textarea,input,.record-disc")) return;
+    let pinchInProgress = false;
+    let suppressClicksUntil = 0;
 
-      pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    viewport.addEventListener("pointerdown", e => {
+      // V2.0: every pointer participates in pinch detection, including pointers
+      // that start on room hotspots/buttons. Interactive controls only opt out
+      // of one-finger panning; they no longer block the second finger.
+      const startedOnControl = !!e.target.closest("button,a,textarea,input,.record-disc");
+
+      pointers.set(e.pointerId, {
+        x:e.clientX,
+        y:e.clientY,
+        startedOnControl
+      });
       viewport.setPointerCapture?.(e.pointerId);
 
-      if (pointers.size === 1 && userScale > 1){
-        dragging = true;
-        lastX = e.clientX;
-        lastY = e.clientY;
+      if (pointers.size === 1){
+        if (!startedOnControl && userScale > 1){
+          dragging = true;
+          lastX = e.clientX;
+          lastY = e.clientY;
+        } else {
+          dragging = false;
+        }
       } else if (pointers.size === 2){
         dragging = false;
+        pinchInProgress = true;
         const pts = [...pointers.values()];
         pinchStartDistance = Math.hypot(
           pts[1].x - pts[0].x,
@@ -142,6 +183,15 @@
         pinchStartScale = userScale;
       }
     });
+
+    // A pinch that began on a hotspot must not trigger that hotspot when the
+    // fingers are lifted.
+    viewport.addEventListener("click", e => {
+      if (performance.now() < suppressClicksUntil){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    }, true);
 
     viewport.addEventListener("pointermove", e => {
       if (!pointers.has(e.pointerId)) return;
@@ -180,6 +230,13 @@
 
     function endPointer(e){
       pointers.delete(e.pointerId);
+
+      if (pinchInProgress && pointers.size < 2){
+        // Suppress the synthetic click Safari/Chrome may emit after a pinch.
+        suppressClicksUntil = performance.now() + 450;
+        pinchInProgress = false;
+      }
+
       if (pointers.size < 2) pinchStartDistance = 0;
       if (pointers.size === 0) dragging = false;
     }
