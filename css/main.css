@@ -223,13 +223,18 @@ html, body{
 }
 
 
-/* ===== V2.0 gesture safety =====
-   Room canvases own pinch/pan; open modal panels must not leak a two-finger
-   gesture to Safari's page zoom/navigation layer. */
+/* ===== V2.2 dialog gesture layer =====
+   Browser/page pinch is disabled while a dialog is open. The dialog itself
+   receives a separate two-finger scale+pan transform in zoom.js. */
 dialog[open],
 dialog[open]::backdrop{
   overscroll-behavior:none;
 }
-dialog[open]{
+dialog.panel[open]{
   touch-action:pan-x pan-y;
+  overflow:hidden;
+}
+dialog.panel > form{
+  transform-origin:center center;
+  will-change:transform;
 }

@@ -3,31 +3,113 @@
   const ART_W = 1536;
   const ART_H = 1024;
 
-  // V2.0 modal guard:
-  // When a native <dialog> is open, a two-finger gesture belongs to the
-  // overlay itself. Prevent Safari from interpreting it as browser/page zoom,
-  // which can disturb the app's visual viewport and scene state.
+  // V2.2 dialog pinch zoom.
+  // Keep Safari page zoom disabled while a modal is open, but give each
+  // dialog its own independent two-finger zoom/pan state instead.
   function modalIsOpen(){
     return !!document.querySelector("dialog[open]");
   }
 
-  document.addEventListener("touchmove", e => {
-    if (modalIsOpen() && e.touches && e.touches.length > 1){
-      e.preventDefault();
+  // Safari's legacy gesture events must never reach the page while a modal is open.
+  ["gesturestart","gesturechange","gestureend"].forEach(type=>{
+    document.addEventListener(type, e=>{
+      if(modalIsOpen()) e.preventDefault();
+    }, {passive:false, capture:true});
+  });
+
+  document.querySelectorAll("dialog.panel").forEach(dialog=>{
+    const surface = dialog.querySelector(":scope > form") || dialog.firstElementChild;
+    if(!surface) return;
+
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let pinching = false;
+    let startDistance = 0;
+    let startScale = 1;
+    let startCenterX = 0;
+    let startCenterY = 0;
+    let startPanX = 0;
+    let startPanY = 0;
+
+    const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+
+    function applyDialogTransform(){
+      if(scale <= 1.001){
+        scale = 1;
+        panX = 0;
+        panY = 0;
+      }
+
+      // Approximate safe pan bounds from the visible modal size. This keeps
+      // zoomed content reachable without letting it disappear completely.
+      const rect = dialog.getBoundingClientRect();
+      const maxX = Math.max(0, rect.width * (scale - 1) * .5 + 55);
+      const maxY = Math.max(0, rect.height * (scale - 1) * .5 + 55);
+      panX = clamp(panX,-maxX,maxX);
+      panY = clamp(panY,-maxY,maxY);
+      surface.style.transform = `translate3d(${panX}px,${panY}px,0) scale(${scale})`;
     }
-  }, {passive:false, capture:true});
 
-  document.addEventListener("gesturestart", e => {
-    if (modalIsOpen()) e.preventDefault();
-  }, {passive:false, capture:true});
+    function touchDistance(touches){
+      const a=touches[0], b=touches[1];
+      return Math.hypot(b.clientX-a.clientX,b.clientY-a.clientY);
+    }
 
-  document.addEventListener("gesturechange", e => {
-    if (modalIsOpen()) e.preventDefault();
-  }, {passive:false, capture:true});
+    function touchCenter(touches){
+      return {
+        x:(touches[0].clientX+touches[1].clientX)/2,
+        y:(touches[0].clientY+touches[1].clientY)/2
+      };
+    }
 
-  document.addEventListener("gestureend", e => {
-    if (modalIsOpen()) e.preventDefault();
-  }, {passive:false, capture:true});
+    dialog.addEventListener("touchstart", e=>{
+      if(e.touches.length !== 2) return;
+      e.preventDefault();
+      pinching = true;
+      startDistance = Math.max(1,touchDistance(e.touches));
+      startScale = scale;
+      const c=touchCenter(e.touches);
+      startCenterX=c.x;
+      startCenterY=c.y;
+      startPanX=panX;
+      startPanY=panY;
+    }, {passive:false, capture:true});
+
+    dialog.addEventListener("touchmove", e=>{
+      if(e.touches.length >= 2){
+        // This is the key V2.2 behavior: consume the gesture here rather than
+        // allowing Safari to zoom the entire document / visualViewport.
+        e.preventDefault();
+        if(!pinching){
+          pinching=true;
+          startDistance=Math.max(1,touchDistance(e.touches));
+          startScale=scale;
+          const c=touchCenter(e.touches);
+          startCenterX=c.x; startCenterY=c.y;
+          startPanX=panX; startPanY=panY;
+        }
+        const distance=touchDistance(e.touches);
+        const c=touchCenter(e.touches);
+        scale=clamp(startScale*(distance/startDistance),1,3.25);
+        panX=startPanX+(c.x-startCenterX);
+        panY=startPanY+(c.y-startCenterY);
+        applyDialogTransform();
+      }
+    }, {passive:false, capture:true});
+
+    dialog.addEventListener("touchend", e=>{
+      if(e.touches.length < 2) pinching=false;
+    }, {passive:false, capture:true});
+    dialog.addEventListener("touchcancel", ()=>{pinching=false;}, {passive:false, capture:true});
+
+    // Reset every modal when it closes. The underlying room keeps its own
+    // zoom/pan exactly where it was.
+    dialog.addEventListener("close", ()=>{
+      scale=1; panX=0; panY=0; pinching=false;
+      surface.style.transform="";
+    });
+  });
 
   document.querySelectorAll(".zoomable-scene").forEach(scene => {
     const viewport = scene.querySelector(".zoom-viewport");
