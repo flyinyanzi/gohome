@@ -1285,3 +1285,36 @@
 .record-needle-hotspot{
   left:66%!important;top:15%!important;width:34%!important;height:72%!important
 }
+
+
+/* ===== V2.7.2 唱片拖动修复 ===== */
+.record-game,.record-game *{
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  -webkit-user-drag:none!important;
+}
+.record-sleeve{
+  left:-2%!important;top:54%!important;width:30%!important;aspect-ratio:1!important;
+}
+.record-disc{
+  left:2.2%;top:67%;width:21.6%!important;aspect-ratio:1!important;
+  z-index:20!important;pointer-events:none!important;transform:none!important;
+  transition:left .12s ease,top .12s ease,opacity .12s ease,filter .12s ease!important;
+}
+.record-disc.dragging{
+  transform:scale(1.06)!important;transition:none!important;
+  filter:drop-shadow(0 12px 16px rgba(0,0,0,.52));
+}
+.record-drag-hit{
+  left:-6%!important;top:48%!important;width:39%!important;height:52%!important;
+  z-index:21!important;touch-action:none!important;user-select:none!important;-webkit-user-select:none!important;
+}
+.record-drop-zone{
+  left:28%!important;top:2%!important;width:72%!important;height:98%!important;border-radius:14%!important;
+}
+.record-needle-hotspot{
+  left:68%!important;top:12%!important;width:32%!important;height:76%!important;z-index:19!important;
+}
+html.record-is-dragging,html.record-is-dragging body,html.record-is-dragging *{
+  user-select:none!important;-webkit-user-select:none!important;-webkit-touch-callout:none!important;
+}

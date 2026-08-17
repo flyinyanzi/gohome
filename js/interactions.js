@@ -98,25 +98,27 @@ function removeRecord(){
 }
 
 if(disc && dropZone && recordDragHit){
-  function moveDiscCenterTo(clientX,clientY){
-    const game=document.getElementById("record-game");
-    if(!game) return;
-    const r=game.getBoundingClientRect();
-    const sx=r.width/game.offsetWidth;
-    const sy=r.height/game.offsetHeight;
-    const x=(clientX-r.left)/Math.max(.001,sx);
-    const y=(clientY-r.top)/Math.max(.001,sy);
-    disc.style.left=`${x-disc.offsetWidth/2}px`;
-    disc.style.top=`${y-disc.offsetHeight/2}px`;
+  const recordGame=document.getElementById("record-game");
+
+  function gamePoint(clientX,clientY){
+    const r=recordGame.getBoundingClientRect();
+    return {
+      x:(clientX-r.left)*(recordGame.offsetWidth/Math.max(1,r.width)),
+      y:(clientY-r.top)*(recordGame.offsetHeight/Math.max(1,r.height))
+    };
   }
 
-  function cancelRecordDrag(){
-    if(!recordDrag) return;
-    recordDragHit.releasePointerCapture?.(recordDrag.pointerId);
+  function moveDisc(clientX,clientY){
+    const p=gamePoint(clientX,clientY);
+    disc.style.left=`${p.x-disc.offsetWidth/2}px`;
+    disc.style.top=`${p.y-disc.offsetHeight/2}px`;
+  }
+
+  function endDrag(pointerId){
+    recordDragHit.releasePointerCapture?.(pointerId);
     recordDragHit.classList.remove("dragging");
     disc.classList.remove("dragging");
-    resetLooseRecord();
-    recordDrag=null;
+    document.documentElement.classList.remove("record-is-dragging");
   }
 
   recordDragHit.addEventListener("pointerdown",e=>{
@@ -126,29 +128,38 @@ if(disc && dropZone && recordDragHit){
     recordDragHit.setPointerCapture?.(e.pointerId);
     recordDragHit.classList.add("dragging");
     disc.classList.add("dragging");
-    moveDiscCenterTo(e.clientX,e.clientY);
-    e.preventDefault();
+    document.documentElement.classList.add("record-is-dragging");
+    moveDisc(e.clientX,e.clientY);
+    e.preventDefault(); e.stopPropagation();
   });
 
   recordDragHit.addEventListener("pointermove",e=>{
     if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
-    moveDiscCenterTo(e.clientX,e.clientY);
-    e.preventDefault();
+    moveDisc(e.clientX,e.clientY);
+    e.preventDefault(); e.stopPropagation();
   });
 
   recordDragHit.addEventListener("pointerup",e=>{
     if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
-    recordDragHit.releasePointerCapture?.(e.pointerId);
-    recordDragHit.classList.remove("dragging");
-    disc.classList.remove("dragging");
     const r=dropZone.getBoundingClientRect();
-    const inside=e.clientX>=r.left && e.clientX<=r.right &&
-                 e.clientY>=r.top && e.clientY<=r.bottom;
-    inside ? placeRecord() : resetLooseRecord();
+    const inside=e.clientX>=r.left && e.clientX<=r.right && e.clientY>=r.top && e.clientY<=r.bottom;
+    endDrag(e.pointerId);
+    if(inside) placeRecord(); else resetLooseRecord();
     recordDrag=null;
+    e.preventDefault(); e.stopPropagation();
   });
 
-  recordDragHit.addEventListener("pointercancel",cancelRecordDrag);
+  recordDragHit.addEventListener("pointercancel",e=>{
+    if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
+    endDrag(e.pointerId);
+    resetLooseRecord();
+    recordDrag=null;
+    e.preventDefault(); e.stopPropagation();
+  });
+
+  ["dragstart","selectstart"].forEach(type=>{
+    recordGame.addEventListener(type,e=>e.preventDefault());
+  });
 }
 
 needle?.addEventListener("click",async()=>{
