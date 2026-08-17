@@ -1258,3 +1258,30 @@
 .music-track-copy small{opacity:.62;margin-top:2px}
 .music-empty-hint{padding:22px 10px 10px;text-align:center;line-height:1.7;opacity:.66}
 .music-empty-hint code{font-size:.9em;background:#e3cfaa;padding:2px 5px;border-radius:5px}
+
+
+/* ===== V2.7.1 唱片拖动手感修正 ===== */
+.record-disc{
+  pointer-events:none!important;
+  transition:left .12s ease,top .12s ease,transform .12s ease,box-shadow .12s ease,opacity .12s ease!important;
+}
+.record-disc.dragging{transition:none!important;transform:scale(1.06)}
+
+.record-drag-hit{
+  position:absolute;left:-4%;top:46%;width:44%;height:52%;z-index:19;
+  padding:0;border:0;border-radius:45%;background:transparent!important;
+  box-shadow:none!important;pointer-events:auto;touch-action:none;
+  -webkit-tap-highlight-color:transparent;cursor:grab
+}
+.record-drag-hit.dragging{cursor:grabbing}
+
+/* 整个唱片机主体附近都算成功，不再只认圆盘。 */
+.record-drop-zone{
+  left:36%!important;top:13%!important;width:64%!important;height:87%!important;
+  border-radius:20%!important
+}
+
+/* 唱针也使用宽松隐藏热点。 */
+.record-needle-hotspot{
+  left:66%!important;top:15%!important;width:34%!important;height:72%!important
+}

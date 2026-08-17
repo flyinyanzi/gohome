@@ -54,9 +54,10 @@ document.querySelector('[data-room="living-room"]').addEventListener("click",()=
   setTimeout(()=>document.getElementById("living-hint")?.classList.add("hide"),6500);
 });
 
-// 唱片机 V2.7：拖唱片 -> 吸附到转盘 -> 点击唱针随机播放
+// 唱片机 V2.7.1：单指直接拖唱片 -> 大范围吸附 -> 点击唱针随机播放
 const disc = document.getElementById("record-disc");
 const sleeve = document.querySelector(".record-sleeve");
+const recordDragHit = document.getElementById("record-drag-hit");
 const dropZone = document.getElementById("record-drop-zone");
 const needle = document.getElementById("record-needle");
 const turntableDisc = document.getElementById("record-on-turntable");
@@ -96,49 +97,58 @@ function removeRecord(){
   resetLooseRecord();
 }
 
-if(disc && dropZone){
-  disc.addEventListener("pointerdown",e=>{
-    if(recordPlaced) return;
-    if(e.pointerType==="mouse" && e.button!==0) return;
-    recordDrag={
-      pointerId:e.pointerId,
-      startX:e.clientX,
-      startY:e.clientY,
-      baseLeft:disc.offsetLeft,
-      baseTop:disc.offsetTop
-    };
-    disc.setPointerCapture?.(e.pointerId);
-    disc.classList.add("dragging");
-    e.preventDefault();
-  });
+if(disc && dropZone && recordDragHit){
+  function moveDiscCenterTo(clientX,clientY){
+    const game=document.getElementById("record-game");
+    if(!game) return;
+    const r=game.getBoundingClientRect();
+    const sx=r.width/game.offsetWidth;
+    const sy=r.height/game.offsetHeight;
+    const x=(clientX-r.left)/Math.max(.001,sx);
+    const y=(clientY-r.top)/Math.max(.001,sy);
+    disc.style.left=`${x-disc.offsetWidth/2}px`;
+    disc.style.top=`${y-disc.offsetHeight/2}px`;
+  }
 
-  disc.addEventListener("pointermove",e=>{
-    if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
-    const stage=document.querySelector("#living-room [data-zoom-stage]");
-    if(!stage) return;
-    const r=stage.getBoundingClientRect();
-    const sx=r.width/1536;
-    const sy=r.height/1024;
-    disc.style.left=`${recordDrag.baseLeft+(e.clientX-recordDrag.startX)/Math.max(.001,sx)}px`;
-    disc.style.top=`${recordDrag.baseTop+(e.clientY-recordDrag.startY)/Math.max(.001,sy)}px`;
-  });
-
-  const finish=e=>{
-    if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
-    disc.releasePointerCapture?.(e.pointerId);
-    disc.classList.remove("dragging");
-    const r=dropZone.getBoundingClientRect();
-    const inside=e.clientX>=r.left && e.clientX<=r.right && e.clientY>=r.top && e.clientY<=r.bottom;
-    inside ? placeRecord() : resetLooseRecord();
-    recordDrag=null;
-  };
-  disc.addEventListener("pointerup",finish);
-  disc.addEventListener("pointercancel",e=>{
-    if(recordDrag?.pointerId!==e.pointerId) return;
+  function cancelRecordDrag(){
+    if(!recordDrag) return;
+    recordDragHit.releasePointerCapture?.(recordDrag.pointerId);
+    recordDragHit.classList.remove("dragging");
     disc.classList.remove("dragging");
     resetLooseRecord();
     recordDrag=null;
+  }
+
+  recordDragHit.addEventListener("pointerdown",e=>{
+    if(recordPlaced) return;
+    if(e.pointerType==="mouse" && e.button!==0) return;
+    recordDrag={pointerId:e.pointerId};
+    recordDragHit.setPointerCapture?.(e.pointerId);
+    recordDragHit.classList.add("dragging");
+    disc.classList.add("dragging");
+    moveDiscCenterTo(e.clientX,e.clientY);
+    e.preventDefault();
   });
+
+  recordDragHit.addEventListener("pointermove",e=>{
+    if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
+    moveDiscCenterTo(e.clientX,e.clientY);
+    e.preventDefault();
+  });
+
+  recordDragHit.addEventListener("pointerup",e=>{
+    if(!recordDrag || recordDrag.pointerId!==e.pointerId) return;
+    recordDragHit.releasePointerCapture?.(e.pointerId);
+    recordDragHit.classList.remove("dragging");
+    disc.classList.remove("dragging");
+    const r=dropZone.getBoundingClientRect();
+    const inside=e.clientX>=r.left && e.clientX<=r.right &&
+                 e.clientY>=r.top && e.clientY<=r.bottom;
+    inside ? placeRecord() : resetLooseRecord();
+    recordDrag=null;
+  });
+
+  recordDragHit.addEventListener("pointercancel",cancelRecordDrag);
 }
 
 needle?.addEventListener("click",async()=>{
