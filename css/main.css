@@ -269,3 +269,20 @@ dialog.panel.is-editing > form{
   box-shadow:none !important;
   -webkit-tap-highlight-color:transparent !important;
 }
+
+/* ===== V2.7.5 inactive scene hit-test isolation =====
+   Some controls inside inactive rooms explicitly use pointer-events:auto
+   (record needle / placed record / drag hit etc.).
+   pointer-events:none on the scene alone is NOT enough, because descendants
+   can opt back into hit-testing. Therefore inactive scenes must hard-disable
+   their entire subtree. */
+.scene:not(.is-active),
+.scene:not(.is-active) *{
+  pointer-events:none !important;
+}
+
+/* The active scene keeps its normal per-control pointer-event rules. */
+.scene.is-active{
+  pointer-events:auto;
+}
+
