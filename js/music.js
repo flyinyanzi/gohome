@@ -9,6 +9,46 @@
       artist: "周杰伦",
       src: "assets/audio/周杰伦 - 晴天.mp3"
     },
+    {
+      title: "Love Song",
+      artist: "方大同",
+      src: "assets/audio/方大同 - Love Song.mp3"
+    },
+    {
+      title: "爱很简单",
+      artist: "陶喆",
+      src: "assets/audio/陶喆 - 爱很简单.mp3"
+    },
+    {
+      title: "Nocturne No. 1 in B-Flat Minor, Op. 9 No. 1",
+      artist: "Chopin",
+      src: "assets/audio/Chopin - Nocturne No. 1 in B-Flat Minor, Op. 9 No. 1.mp3"
+    },
+    {
+      title: "Nocturne No. 2 in E flat major, Op. 9 No. 2",
+      artist: "Chopin",
+      src: "assets/audio/Chopin - Nocturne No. 2 in E flat major, Op. 9 No. 2.mp3"
+    },
+    {
+      title: "Nocturne No. 7 in C sharp minor, Op. 27 No. 1",
+      artist: "Chopin",
+      src: "assets/audio/Chopin - Nocturne No. 7 in C sharp minor, Op. 27 No. 1.mp3"
+    },
+    {
+      title: "Ballade no. 1 in G minor, Op. 23",
+      artist: "Chopin",
+      src: "assets/audio/Chopin - Ballade no. 1 in G minor, Op. 23.mp3"
+    },
+    {
+      title: "Impromptu No.2 in F-Sharp, Op.36",
+      artist: "Chopin",
+      src: "assets/audio/Chopin - Impromptu No.2 in F-Sharp, Op.36.mp3"
+    },
+    {
+      title: "With An Orchid",
+      artist: "Yanni",
+      src: "assets/audio/Yanni - With An Orchid.mp3"
+    },
   ];
 
   const audio=new Audio();
