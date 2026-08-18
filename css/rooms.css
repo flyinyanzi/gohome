@@ -152,13 +152,15 @@
   box-shadow:0 0 30px rgba(255,206,120,.24) !important;
 }
 
-/* Pixel coordinates measured directly from assets/images/home-concept.png (1536×1024). */
-.home-stage .living  { left:425px !important; top:207px !important; width:153px !important; height:99px !important; }
-.home-stage .bedroom { left:1007px !important; top:90px  !important; width:157px !important; height:101px !important; }
-.home-stage .window  { left:974px !important; top:295px !important; width:154px !important; height:102px !important; }
-.home-stage .cat     { left:277px !important; top:424px !important; width:147px !important; height:103px !important; }
-.home-stage .balcony { left:568px !important; top:478px !important; width:146px !important; height:103px !important; }
-.home-stage .study   { left:872px !important; top:468px !important; width:157px !important; height:105px !important; }
+/* ===== V2.7.3 首页入口：按最新 home-concept.png 重新对齐 =====
+   Latest artwork canvas: 1536×1024.
+   These are transparent click layers over the six painted room buttons. */
+.home-stage .living  { left:456px !important; top:247px !important; width:184px !important; height:95px !important; }
+.home-stage .bedroom { left:1158px !important; top:91px  !important; width:161px !important; height:102px !important; }
+.home-stage .window  { left:1060px !important; top:356px !important; width:162px !important; height:113px !important; }
+.home-stage .cat     { left:247px !important; top:495px !important; width:157px !important; height:111px !important; }
+.home-stage .balcony { left:665px !important; top:590px !important; width:154px !important; height:111px !important; }
+.home-stage .study   { left:989px !important; top:554px !important; width:171px !important; height:114px !important; }
 
 /* ===== V1.8 卧室：所有热点与 bedroom-v1.png 同一 1536×1024 画布 ===== */
 .room-bedroom{
