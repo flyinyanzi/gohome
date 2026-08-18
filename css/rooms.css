@@ -1320,3 +1320,83 @@
 html.record-is-dragging,html.record-is-dragging body,html.record-is-dragging *{
   user-select:none!important;-webkit-user-select:none!important;-webkit-touch-callout:none!important;
 }
+
+/* ===== V2.7.4 游戏柜：仅修正手机可视高度与纵向滚动 =====
+   基于用户提供的 V2.7.3 rooms.css；不修改首页房间入口坐标。 */
+.study-games-panel{
+  width:min(760px,94vw) !important;
+  max-height:88dvh !important;
+}
+.study-games-panel > form{
+  max-height:88dvh !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  padding:24px !important;
+}
+.study-games-panel .study-game-shelf{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:14px !important;
+}
+.study-games-panel .study-game-card{
+  min-height:0 !important;
+  padding:15px !important;
+}
+.study-games-panel .game-cover{
+  aspect-ratio:16/9 !important;
+  min-height:105px;
+  max-height:150px;
+}
+.study-games-panel .empty-game-slot{
+  grid-column:1 / -1;
+  min-height:68px !important;
+  padding:10px !important;
+  font-size:26px !important;
+}
+
+@media (max-width:700px){
+  .study-games-panel{
+    width:min(92vw,560px) !important;
+    max-height:86dvh !important;
+  }
+  .study-games-panel > form{
+    max-height:86dvh !important;
+    padding:18px 16px 22px !important;
+  }
+  .study-games-panel h3{
+    margin-bottom:9px !important;
+    font-size:24px !important;
+  }
+  .study-games-panel .panel-lead{
+    margin-bottom:10px !important;
+  }
+  .study-games-panel .study-game-shelf{
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+  .study-games-panel .study-game-card{
+    display:grid !important;
+    grid-template-columns:104px minmax(0,1fr) !important;
+    grid-template-rows:auto auto !important;
+    align-items:center;
+    column-gap:12px !important;
+    row-gap:7px !important;
+  }
+  .study-games-panel .study-game-card .game-cover{
+    grid-row:1 / 3;
+    width:104px;
+    min-height:82px;
+    max-height:none;
+    aspect-ratio:4/3 !important;
+    font-size:19px;
+  }
+  .study-games-panel .study-game-card a{
+    margin-top:0 !important;
+    padding:9px 11px !important;
+  }
+  .study-games-panel .empty-game-slot{
+    min-height:54px !important;
+  }
+}
