@@ -4,7 +4,11 @@
   // 示例：
   // { title:"歌名", artist:"歌手", src:"assets/audio/example.mp3" },
   const PLAYLIST = [
-    // 等第一批 mp3 到位后填入。
+    {
+      title: "晴天",
+      artist: "周杰伦",
+      src: "assets/audio/周杰伦 - 晴天.mp3"
+    },
   ];
 
   const audio=new Audio();
